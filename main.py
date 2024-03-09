@@ -65,11 +65,17 @@ def prodRemoving():
 
   for product in products:
     if product["id"] == product_id:
-      products.remove(product)
+      ans = input("Are you sure you want to remove this product? [1] Yes [2] No\n")
+      if ans == "1":
+        products.remove(product)
+      else:
+        prodRemoving()
       print("\n\nProduct removed successfully!")
       break
   else:
     print("\n\nProduct not found!")
+    prodRemoving()
+  menu()
 
 def prodUpdating():
   product_id = input("Enter the product ID: ")
@@ -92,6 +98,9 @@ def prodUpdating():
   
 def prodListing():
   for product in products:
+    if not products:
+      print("\n\nNo products found!")
+      menu()
     print("\n\nID:", product["id"])
     print("Name:", product["name"])
     print("Price:", product["price"])
