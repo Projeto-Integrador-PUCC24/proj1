@@ -1,3 +1,7 @@
+import mysql.connector, db
+
+mydb = mysql.connector.connect(
+  host=db.host)
 products = []
 def menu():
     menu = int(input("\n\nChoose another option!\n[1]Add a product.\n[2]Remove a product.\n[3]Update a product\n[4]List all products\n[5]Search for a product\n[6]Exit.\n"))
