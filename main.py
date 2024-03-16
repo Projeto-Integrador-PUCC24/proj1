@@ -21,37 +21,28 @@ def menu():
       case _:
         print("\n\nInvalid option!")
 def prodAdding():
-  product_id = input("Enter the product ID: ")
-  if any(product["id"] == product_id for product in products):
-    print("\n\nID already exists!")
+  product_id = input("Insira o código do produto: ")
+  product_id = int(product_id)
+  if (product_id in products):
+    print("\n\nProduct already exists!")
     prodAdding()
-  if not product_id:
-    print("\n\nID cannot be empty!")
-    prodAdding()
-  if not product_id.isdigit():
-    print("\n\nID must be a number!")
-    prodAdding()
-  product_name = input("Enter the product name: ")
-  if not product_name:
-    print("\n\nName cannot be empty!")
-    prodAdding()
-  product_price = float(input("Enter the product price: "))
-  if product_price <= 0:
-    print("\n\nPrice must be greater than zero!")
-    return
-  if not product_price:
-    print("\n\nPrice cannot be empty!")
-    return
-  product_type = input("Enter the product type: ")
-  if not product_type:
-    print("\n\nType cannot be empty!")
-    return
+  product_name = input("Insira o nome do produto: ")
+  product_desc = input("Insira a descrição do produto: ")
+  product_cost = input("Insira o custo do produto: ")
+  product_cf = input("Insira o custo fixo do produto: ")
+  product_cv = input("Insira a comissão de vendas: ")
+  product_tax = input("Insira o valor dos impostos: ")
+  product_ml = input("Insira a rentabilidade/margem de lucro: ")
 
   product = {
-    "id": product_id,
+    "id": product_id, 
     "name": product_name,
-    "price": product_price,
-    "type": product_type
+    "description": product_desc,
+    "price": product_cost,
+    "custo fixo": product_cf,
+    "commission": product_cv,
+    "tax": product_tax,
+    "margin": product_ml
   }
 
   products.append(product)
