@@ -1,4 +1,5 @@
 import main, time
+import tabulate
 main.products = []
 def prodAdding():
   while True:
@@ -34,101 +35,43 @@ def prodAdding():
       if (product_ml < 0):
         print("\n\Valor inválido!")
         continue 
-    
+      product_cv = product_cv * product_cost / 100
+      product_tax = product_tax * product_cost / 100
+      product_ml = product_ml * product_cost / 100
+      sellingPrice = product_cost / ( 1 - (product_cf + product_cv + product_tax + product_ml/100))
 
-      product = {
-        "id": product_id, 
-        "name": product_name,
-        "description": product_desc,
-        "price": product_cost,
-        "custo fixo": product_cf,
-        "commission": product_cv,
-        "tax": product_tax,
-        "margin": product_ml
-      }
-
-      main.products.append(product)
-
+      product = [product_id, product_name, product_desc, product_cost, product_cf, product_cv, product_tax, product_ml]
+      products = [["Nome", "Preço", "Margem de Lucro"],[product_name, sellingPrice, product_ml]]
+      print("=============================================")
+      print("\n\nProduct overview: ")
+      table1 = tabulate.tabulate(products,headers = "firstrow", tablefmt = "fancy_grid")
+      print(table1)
+      print("=============================================")
+      print("\n\nMore details: ")
+      productDetails = [["ID", "Nome", "Descrição", "Custo", "Custo Fixo", "Comissão de Vendas", "Impostos", "Margem de Lucro"],[product_id, product_name, product_desc, product_cost, product_cf, product_cv, product_tax, product_ml]]
+      table2 = tabulate.tabulate(productDetails,headers = "firstrow", tablefmt = "fancy_grid")
+      print(table2)
+      print("=============================================")
       print("\n\nProduct added successfully!")
       print("\n\nWant to add another product?")
       answer = input("[1] Yes\n[2] No\n")
       if answer == "1":
         prodAdding()
       else:
-        main.menu()
+        main.menu() 
       break
     except ValueError:
-      print("\n\nInvalid ID!")
+      print("\n\nInvalid value! Please try again.")
       prodAdding()
 
+def prodListing():
+  print("Not implemented.")
+  
 def prodRemoving():
-  main.cls()
-  while True:
-    try:
-      product_id = int(input("Enter the product ID: "))
-
-      for product in main.products:
-        if product["id"] == product_id:
-          ans = input("Are you sure you want to remove this product? [1] Yes [2] No\n")
-          if ans == "1":
-            main.products.remove(product)
-            print("\n\nProduct removed successfully!")
-            main.menu()
-          else:
-            prodRemoving()
-      else:
-        print("\n\nProduct not found!")
-        prodRemoving()
-      main.menu()
-    except ValueError:
-      print("\n\nInvalid ID!")
-      prodRemoving()
+  print("Not implemented.")
 
 def prodUpdating():
-  main.cls()
-  product_id = int(input("Enter the product ID: "))
-  for product in main.products:
-    if product["id"] == product_id:
-      product_name = input("Enter the product name: ")
-      product_price = float(input("Enter the product price: "))
-
-      product["name"] = product_name
-      product["price"] = product_price
-
-      print("\n\nProduct updated successfully!")
-      main.menu()
-      
-  else:
-    print("\n\nProduct not found!")
-    prodUpdating()
-
-def prodListing():
-  main.cls()
-  for product in main.products:
-    if not main.products:
-      print("\n\nNo products found!")
-      main.menu()
-    print("\n\nID:", product["id"])
-    print("Name:", product["name"])
-    print("Price:", product["price"])
-    time.sleep(10)
-  main.menu()
+  print("Not implemented.")
 
 def prodSearching():
-  main.cls()
-  product_id = input("Enter the product ID: ")
-
-  for product in main.products:
-    if product["id"] == product_id:
-      print("\n\nID:", product["id"])
-      print("Name:", product["name"])
-      print("Price:", product["price"])
-      print("Type:", product["type"])
-      break
-  else:
-    print("\n\nProduct not found!")
-  main.menu()
-
-print("\n\nWelcome to our system!")
-main.menu()
-  
+  print("Not implemented.")
