@@ -35,13 +35,18 @@ def prodAdding():
       if (product_ml < 0):
         print("\n\Valor inválido!")
         continue 
+      product_cf = product_cf * product_cost / 100
       product_cv = product_cv * product_cost / 100
       product_tax = product_tax * product_cost / 100
       product_ml = product_ml * product_cost / 100
-      sellingPrice = product_cost / ( 1 - (product_cf + product_cv + product_tax + product_ml/100))
+      print(product_cf)
+      print(product_cv)
+      print(product_tax)
+      print(product_ml)
+      sellingPrice = product_cost / ( 1 - ((product_cf + product_cv + product_tax + product_ml)/100))
       
       if (product_ml > 20):
-        product_mlDesc = "High"
+        product_mlDesc = "High"   
       elif (product_ml > 10 and product_ml < 20):
         product_mlDesc = "Medium"
       elif (product_ml > 0 and product_ml < 10):
