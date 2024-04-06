@@ -39,6 +39,17 @@ def prodAdding():
       product_tax = product_tax * product_cost / 100
       product_ml = product_ml * product_cost / 100
       sellingPrice = product_cost / ( 1 - (product_cf + product_cv + product_tax + product_ml/100))
+      
+      if (product_ml > 20):
+        product_mlDesc = "High"
+      elif (product_ml > 10 and product_ml < 20):
+        product_mlDesc = "Medium"
+      elif (product_ml > 0 and product_ml < 10):
+        product_mlDesc = "Low"
+      elif (product_ml == 0):
+        product_mlDesc = "None"
+      if (product_ml < 0):
+        product_mlDesc = "Negative profit."
 
       product = [product_id, product_name, product_desc, product_cost, product_cf, product_cv, product_tax, product_ml]
       products = [["Nome", "Preço", "Margem de Lucro"],[product_name, sellingPrice, product_ml]]
@@ -48,7 +59,7 @@ def prodAdding():
       print(table1)
       print("=============================================")
       print("\n\nMore details: ")
-      productDetails = [["ID", "Nome", "Descrição", "Custo", "Custo Fixo", "Comissão de Vendas", "Impostos", "Margem de Lucro"],[product_id, product_name, product_desc, product_cost, product_cf, product_cv, product_tax, product_ml]]
+      productDetails = [["ID", "Nome", "Descrição", "Custo", "Custo Fixo", "Comissão de Vendas", "Impostos", "Margem de Lucro", "Descrição do Lucro"],[product_id, product_name, product_desc, product_cost, product_cf, product_cv, product_tax, product_ml, product_mlDesc]]
       table2 = tabulate.tabulate(productDetails,headers = "firstrow", tablefmt = "fancy_grid")
       print(table2)
       print("=============================================")
