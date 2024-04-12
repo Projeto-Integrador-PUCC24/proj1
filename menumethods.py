@@ -74,7 +74,7 @@ def prodAdding():
             ["Impostos", f"R${product_tax}", product_tax_percent],
             ["Outros custos", f"R${others}", others_percent], 
             ["Rentabilidade", f"R${product_ml}", product_ml_percent],
-            ["Descrição da Margem de Lucro", f"R${product_mlDesc}", product_ml_percent]
+            ["Descrição da Margem de Lucro", product_mlDesc, product_ml_percent]
             ]
       table2 = tabulate.tabulate(productDetails,headers = "firstrow", tablefmt = "github")
       print(table2)
