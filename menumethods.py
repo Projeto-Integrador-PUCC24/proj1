@@ -9,8 +9,6 @@ def prodAdding():
       if(product_id < 0):
         print("\n\nInvalid ID!")
         continue
-      product_name = input("Insira o nome do produto: ")
-      product_desc = input("Insira a descrição do produto: ")
       product_cost = float(input("Insira o custo do produto: "))
       if (product_cost < 0):
         print("\n\Valor inválido!")
@@ -49,7 +47,7 @@ def prodAdding():
       elif (product_ml_percent > 0 and product_ml_percent < 10):
           product_mlDesc = "Lucro baixo"
       elif (product_ml_percent == 0):
-          product_mlDesc = "Lucro nulo"
+          product_mlDesc = "Equilíbrio"
       elif (product_ml_percent < 0):
           product_mlDesc = "Prejuízo"   
       others = product_cf + product_cv + product_tax
@@ -69,7 +67,7 @@ def prodAdding():
       table2 = tabulate.tabulate(productDetails,headers = "firstrow", tablefmt = "github")
       print(table2)
       print("=============================================")
-      products = [["Nome", "Preço de Venda", "Margem de Lucro"],[product_name, round(sellingPrice,2), round(product_ml,2)]]
+      products = [["Nome", "Preço de Venda", "Margem de Lucro"],[product_id, round(sellingPrice,2), round(product_ml,2)]]
 
       print("\n\nVisão geral: ")
       table1 = tabulate.tabulate(products,headers = "firstrow", tablefmt = "github")
@@ -88,13 +86,13 @@ def prodAdding():
       prodAdding()
 
 def prodListing():
-  print("Not implemented.")
+  print("Não implementado.")
   
 def prodRemoving():
-  print("Not implemented.")
+  print("Não implementado.")
 
 def prodUpdating():
-  print("Not implemented.")
+  print("Não implementado.")
 
 def prodSearching():
-  print("Not implemented.")
+  print("Não implementado.")
