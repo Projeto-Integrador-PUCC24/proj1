@@ -66,7 +66,7 @@ def prodAdding():
             ]
       table2 = tabulate.tabulate(productDetails,headers = "firstrow", tablefmt = "grid")
       print(table2)
-      products = [["Nome", "Preço de Venda", "Margem de Lucro"],[product_id, round(sellingPrice,2), round(product_ml,2)]]
+      products = [["Código", "Preço de Venda", "Margem de Lucro"],[product_id, round(sellingPrice,2), round(product_ml,2)]]
 
       print("\n\nVisão geral: ")
       table1 = tabulate.tabulate(products,headers = "firstrow", tablefmt = "grid")
