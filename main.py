@@ -6,7 +6,8 @@ def cls():
 def menu():
     while True:
       try:
-        menu = int(input("\n\nEscolha uma opção.\n[1]Adicione um produto.\n[2]Remova um produto.\n[3]Atualize um produto\n[4]Ver todos os produtos\n[5]Buscar produto\n[6]Sair.\n"))
+        print("\n\nEscolha uma opção.\n[1]Adicione um produto.\n[2]Remova um produto.\n[3]Atualize um produto.\n[4]Ver todos os produtos.\n[5]Buscar produto.\n[6]Sair.\n")
+        menu = int(input("Opção: "))
         match menu:
           case 1:
             menumethods.prodAdding()

@@ -64,15 +64,13 @@ def prodAdding():
             ["Rentabilidade", round(product_ml,2), product_ml_percent],
             ["Descrição da Margem de Lucro", product_mlDesc, product_ml_percent]
             ]
-      table2 = tabulate.tabulate(productDetails,headers = "firstrow", tablefmt = "github")
+      table2 = tabulate.tabulate(productDetails,headers = "firstrow", tablefmt = "grid")
       print(table2)
-      print("=============================================")
       products = [["Nome", "Preço de Venda", "Margem de Lucro"],[product_id, round(sellingPrice,2), round(product_ml,2)]]
 
       print("\n\nVisão geral: ")
-      table1 = tabulate.tabulate(products,headers = "firstrow", tablefmt = "github")
+      table1 = tabulate.tabulate(products,headers = "firstrow", tablefmt = "grid")
       print(table1)
-      print("=============================================")
       print("\n\nProduct added successfully!")
       print("\n\nWant to add another product?")
       answer = input("[1] Yes\n[2] No\n")
