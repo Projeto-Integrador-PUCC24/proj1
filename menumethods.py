@@ -40,9 +40,9 @@ def prodAdding():
       product_tax = (product_tax_percent * sellingPrice) / 100
       product_ml = (product_ml_percent * sellingPrice) / 100
 
-      if (product_ml_percent >= 20):
+      if (product_ml_percent > 20):
           product_mlDesc = "Lucro alto"   
-      elif (product_ml_percent > 10 and product_ml_percent < 20):
+      elif (product_ml_percent > 10 and product_ml_percent <= 20):
           product_mlDesc = "Lucro Médio"
       elif (product_ml_percent > 0 and product_ml_percent < 10):
           product_mlDesc = "Lucro baixo"
