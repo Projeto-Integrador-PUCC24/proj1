@@ -1,4 +1,4 @@
-import os, menumethods, time
+import os, menumethods, time, db
 products = []
 def cls():
     os.system("cls" if os.name == "nt" else "clear")
@@ -22,6 +22,8 @@ def menu():
             menumethods.prodSearching()
           case 6:
             print("\n\nFinalizando execução.")
+          case 7:
+            db.con()
           case _:
             print("\n\nOpção inválida.")
       except ValueError:

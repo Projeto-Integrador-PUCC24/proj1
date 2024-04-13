@@ -54,7 +54,7 @@ def prodAdding():
       others_percent = (others / sellingPrice) * 100
       print("=============================================")
       print("\n\nVisão detalhada: ")
-      productDetails = [["Descrição", "Valor", "%"],["Preço de Venda", round(sellingPrice,2), 100],
+      productDetails = [["Descrição", "Valor", "%"],["Preço de    Venda", round(sellingPrice,2), 100],
             ["Custo de aquisição", round(product_cost,2), sellingPrice_percent ],
             ["Receita Bruta", round(grossIncome, 2), grossIncome_percent],
             ["Custo Fixo", round(product_cf,2), product_cf_percent],
