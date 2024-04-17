@@ -13,5 +13,5 @@ A instalação deve ser feita seguindo estes passos:
 - Executar o programa.
 
 # Dúvidas
-###O programa pode ser executado em qualquer sistema operacional?
+### O programa pode ser executado em qualquer sistema operacional?
 Sim. A linguagem Python pode ser executada em qualquer sistema operacional, como os das famílias **Unix**, **Windows** e **MacOS**. 
