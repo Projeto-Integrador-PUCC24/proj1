@@ -7,7 +7,7 @@ def prodAdding():
       product_id = input("Insira o código do produto: ")
       product_id = int(product_id)
       if(product_id < 0):
-        print("\n\nInvalid ID!")
+        print("\n\nCódigo inválido!")
         prodAdding()
       product_name = "Coca-Cola"
       product_desc = "Refrigerante de cola"

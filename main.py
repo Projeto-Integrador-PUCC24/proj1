@@ -1,4 +1,5 @@
 import os, menumethods, time
+import os, menumethods, time
 products = []
 def cls():
     os.system("cls" if os.name == "nt" else "clear")
@@ -6,7 +7,8 @@ def cls():
 def menu():
     while True:
       try:
-        menu = int(input("\n\nChoose an option!\n[1]Add a product.\n[2]Remove a product.\n[3]Update a product\n[4]List all products\n[5]Search for a product\n[6]Exit.\n"))
+        print("\n\nEscolha uma opção.\n[1]Cadastrar produto.\n[2]Remover um produto.\n[3]Atualizar um produto.\n[4]Listar todos os produtos.\n[5]Buscar por um produto.\n[6]Sair.\n")
+        menu = int(input("Digite o número da opção desejada: "))
         match menu:
           case 1:
             menumethods.prodAdding()
@@ -20,11 +22,11 @@ def menu():
           case 5:
             menumethods.prodSearching()
           case 6:
-            print("\n\nGoodbye!")
+            print("\n\nFinalizando execução.")
           case _:
-            print("\n\nInvalid option!")
+            print("\n\nOpção inválida.")
       except ValueError:
-        print("\n\nInvalid value! Please try again.")
+        print("\n\nValor inválido, favor tentar novamente.")
         time.sleep(1)
         cls()
 
