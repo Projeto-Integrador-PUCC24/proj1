@@ -1,6 +1,6 @@
 # Sobre o projeto
 
-Este programa foi desenvolvido utilizando Python e a sua biblioteca 'tabulate', visando:
+Este programa foi desenvolvido utilizando Python e a sua biblioteca [tabulate](https://pypi.org/project/tabulate/), visando:
 - Facilitar o cálculo de preço de venda de produtos para sistemas de mercados;
 - Exibir dados relevantes ao produto, como onde se encaixa a margem de lucro.
 
