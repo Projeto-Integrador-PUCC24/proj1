@@ -1,4 +1,4 @@
-import os, menumethods, time
+
 import os, menumethods, time
 products = []
 def cls():
@@ -29,7 +29,6 @@ def menu():
         print("\n\nValor inválido, favor tentar novamente.")
         time.sleep(1)
         cls()
-
 if __name__ == "__main__":
   cls()
   menu()
