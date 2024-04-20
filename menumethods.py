@@ -1,6 +1,11 @@
-import main, time
-import tabulate
+import main, time, db
+import tabulate, mysql.connector
 main.products = []
+def con():
+      conn = mysql.connector.connect(host = db.host, user = db.user, pwd = db.pwd, db = db.schema)
+      if (conn != None):
+        print("Connected successfully!")
+    
 def prodAdding():
   while True:
     try:
