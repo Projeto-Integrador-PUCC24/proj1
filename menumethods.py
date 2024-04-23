@@ -1,5 +1,5 @@
-import main, time, db
-import tabulate, mysql.connector, ctypes
+import main, time, db, db
+import tabulate, mysql.connector, ctypes, mysql.connector
 main.products = []
 
 def con():
@@ -11,14 +11,24 @@ def con():
       print("Connection failed.")
       time.sleep(1)
       ctypes.windll.user32.MessageBoxW(0, "Connection failed.", "Error", 1)
+def con():
+      conn = mysql.connector.connect(host = db.host, user = db.user, pwd = db.pwd, db = db.schema)
+      if (conn != None):
+        print("Connected successfully!")
+    
 def prodAdding():
   while True:
     try:
       product_id = input("Insira o código do produto: ")
       product_id = int(product_id)
       if(product_id < 0):
-        print("\n\nInvalid ID!")
-        continue
+        print("\n\nCódigo inválido!")
+        prodAdding()
+      product_cost = 36.00
+      product_cf_percent = 15
+      product_cv_percent = 5
+      product_tax_percent = 12
+      product_ml_percent = 20
       product_cost = float(input("Insira o custo do produto: "))
       if (product_cost < 0):
         print("\n\Valor inválido!")
