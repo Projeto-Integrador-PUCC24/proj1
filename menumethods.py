@@ -1,6 +1,16 @@
-import main, time
-import tabulate
+import main, time, db
+import tabulate, mysql.connector, ctypes
 main.products = []
+
+def con():
+   conn = mysql.connector.connect(host = db.host, user = db.user, password = db.password, database = db.database)
+   if (conn != None):
+      print("Connected succesfully.")
+      ctypes.windll.user32.MessageBoxW(0, "Connection successful.", "Success", 1)
+   else:
+      print("Connection failed.")
+      time.sleep(1)
+      ctypes.windll.user32.MessageBoxW(0, "Connection failed.", "Error", 1)
 def prodAdding():
   while True:
     try:
