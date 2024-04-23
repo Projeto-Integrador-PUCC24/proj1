@@ -20,7 +20,8 @@ def prodAdding():
       if(product_id < 0):
         print("\n\nCódigo inválido!")
         prodAdding()
-      
+      product_name = input("Insira o nome do produto: ")
+      product_desc = input("Insira a descrição do produto: ")
       product_cost = float(input("Insira o custo do produto: "))
       if (product_cost < 0):
         print("\n\Valor inválido!")
