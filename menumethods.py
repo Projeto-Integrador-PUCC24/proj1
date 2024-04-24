@@ -9,7 +9,17 @@ def con():
       else:
         print("Connection failed!")
         return None
-
+'''def pushProduct(product_id, product_name, product_desc,):
+  conn = con()
+  if conn != None:
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO products (product_id, sellingPrice, product_ml) VALUES (%s, %s, %s)", 
+    conn.commit()
+    cursor.close()
+    conn.close()
+    print("Product added successfully!")
+  else:
+    print("Product not added!")'''
 
     
 def prodAdding():
@@ -84,7 +94,7 @@ def prodAdding():
       print("\n\nVisão geral: ")
       table1 = tabulate.tabulate(products,headers = "firstrow", tablefmt = "grid")
       print(table1)
-      
+      pushProduct(product_id, product_name, product_desc, sellingPrice, product_ml)
       print("\n\nProduct added successfully!")
       print("\n\nWant to add another product?")
       answer = input("[1] Yes\n[2] No\n")
