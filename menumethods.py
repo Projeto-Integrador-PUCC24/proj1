@@ -15,6 +15,12 @@ def con():
       conn = mysql.connector.connect(host = db.host, user = db.user, pwd = db.pwd, db = db.schema)
       if (conn != None):
         print("Connected successfully!")
+        return conn
+      else:
+        print("Connection failed!")
+        return None
+
+
     
 def prodAdding():
   while True:
@@ -24,11 +30,8 @@ def prodAdding():
       if(product_id < 0):
         print("\n\nCódigo inválido!")
         prodAdding()
-      product_cost = 36.00
-      product_cf_percent = 15
-      product_cv_percent = 5
-      product_tax_percent = 12
-      product_ml_percent = 20
+      product_name = input("Insira o nome do produto: ")
+      product_desc = input("Insira a descrição do produto: ")
       product_cost = float(input("Insira o custo do produto: "))
       if (product_cost < 0):
         print("\n\Valor inválido!")
@@ -91,6 +94,7 @@ def prodAdding():
       print("\n\nVisão geral: ")
       table1 = tabulate.tabulate(products,headers = "firstrow", tablefmt = "grid")
       print(table1)
+      
       print("\n\nProduct added successfully!")
       print("\n\nWant to add another product?")
       answer = input("[1] Yes\n[2] No\n")
