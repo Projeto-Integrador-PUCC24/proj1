@@ -1,5 +1,5 @@
-import main, time, db, db
-import tabulate, mysql.connector, ctypes, mysql.connector
+import main, time, db
+import tabulate, mysql.connector, ctypes
 main.products = []
 
 def con():
@@ -11,25 +11,19 @@ def con():
       print("Connection failed.")
       time.sleep(1)
       ctypes.windll.user32.MessageBoxW(0, "Connection failed.", "Error", 1)
-def con():
-      conn = mysql.connector.connect(host = db.host, user = db.user, pwd = db.pwd, db = db.schema)
-      if (conn != None):
-        print("Connected successfully!")
-        return conn
-      else:
-        print("Connection failed!")
-        return None
 '''def pushProduct(product_id, product_name, product_desc,):
   conn = con()
   if conn != None:
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO products (product_id, sellingPrice, product_ml) VALUES (%s, %s, %s)", 
+    sql = "INSERT INTO products (cod, desc, cp, ip, cf, cm, ml) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    vals = (product_id, product_name, product_desc, product_cost, product_tax_percent, product_cf_percent, product_cv_percent, product_ml_percent)
     conn.commit()
     cursor.close()
     conn.close()
     print("Product added successfully!")
   else:
     print("Product not added!")'''
+
 
     
 def prodAdding():
