@@ -1,32 +1,28 @@
 import main, time
-from db import conn, host, user, password, database
+from db import host, user, password, database
 import tabulate, mysql.connector, ctypes
 main.products = []
-
-
-
-   
 def con():
-   conn = mysql.connector.connect(host = host, user = user, password = password, database = database)
-   if (conn != None):
+   if (main.conn != None):
       print("Connected succesfully.")
       ctypes.windll.user32.MessageBoxW(0, "Connection successful.", "Success", 1)
    else:
       print("Connection failed.")
       time.sleep(1)
       ctypes.windll.user32.MessageBoxW(0, "Connection failed.", "Error", 1)
-'''def pushProduct(product_id, product_name, product_desc,):
+def pushProduct(cod, nome, desc, cp, ip, cf, cm, ml):
   conn = con()
   if conn != None:
     cursor = conn.cursor()
-    sql = "INSERT INTO products (cod, desc, cp, ip, cf, cm, ml) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-    vals = (product_id, product_name, product_desc, product_cost, product_tax_percent, product_cf_percent, product_cv_percent, product_ml_percent)
+    sql = "INSERT INTO products (cod, nome, desc, cp, ip, cf, cm, ml) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+    vals = (cod, nome, desc, cp, ip, cf, cm, ml)
+    cursor.execute(sql, vals)
     conn.commit()
     cursor.close()
     conn.close()
     print("Product added successfully!")
   else:
-    print("Product not added!")'''
+    print("Product not added. Connection failed.")
 
 
     
@@ -38,11 +34,8 @@ def prodAdding():
       if(product_id < 0):
         print("\n\nCódigo inválido!")
         prodAdding()
-      product_cost = 36.00
-      product_cf_percent = 15
-      product_cv_percent = 5
-      product_tax_percent = 12
-      product_ml_percent = 20
+      product_name = input("Insira o nome do produto: ")
+      product_desc = input("Insira uma breve descrição do produto: ")
       product_cost = float(input("Insira o custo do produto: "))
       if (product_cost < 0):
         print("\n\Valor inválido!")
@@ -105,6 +98,7 @@ def prodAdding():
       print("\n\nVisão geral: ")
       table1 = tabulate.tabulate(products,headers = "firstrow", tablefmt = "grid")
       print(table1)
+      pushProduct(product_id, product_name, product_desc, product_cost, product_tax_percent, product_cf_percent, product_cv_percent, product_ml_percent)
       print("\n\nProduct added successfully!")
       print("\n\nWant to add another product?")
       answer = input("[1] Yes\n[2] No\n")
@@ -118,7 +112,35 @@ def prodAdding():
       prodAdding()
 
 def prodListing():
-  print("Não implementado.")
+  while True:
+    try:
+      conn = mysql.connector.connect(host = host, user = user, password = password, database = database)
+      cursor = conn.cursor()
+      cursor.execute("SELECT * FROM products")
+      result = cursor.fetchall()
+      print("\n\nListing all products: ")
+      print("=============================================")
+      for row in result:
+        print("Código: ", row[0])
+        print("Nome: ", row[1])
+        print("Descrição: ", row[2])
+        print("Custo: ", row[3])
+        print("Impostos: ", row[4])
+        print("Custo Fixo: ", row[5])
+        print("Comissão de Vendas: ", row[6])
+        print("Margem de Lucro: ", row[7])
+        print("=============================================")
+      conn.close()
+      print("\n\nWant to list all products again?")
+      answer = input("[1] Yes\n[2] No\n")
+      if answer == "1":
+        prodListing()
+      else:
+        main.menu()
+      break
+    except ValueError:
+      print("\n\nInvalid value! Please try again.")
+      prodListing()
   
 def prodRemoving():
   print("Não implementado.")

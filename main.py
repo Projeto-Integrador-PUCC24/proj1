@@ -1,12 +1,13 @@
 import os, menumethods, time, db, ctypes
+import mysql.connector
 products = []
 def cls():
     os.system("cls" if os.name == "nt" else "clear")
-
+conn = mysql.connector.connect(host = db.host, user = db.user, password = db.password, database = db.database)
 def menu():
     while True:
       try:
-        if (db.conn != None):
+        if (menumethods.conn != None):
           print("Connected succesfully.")
           ctypes.windll.user32.MessageBoxW(0, "Connection successful.", "Success", 1)
         else:
