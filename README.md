@@ -1,6 +1,9 @@
 # Sobre o projeto
 
-Este programa foi desenvolvido utilizando Python e a sua biblioteca [tabulate](https://pypi.org/project/tabulate/), visando:
+Este programa foi desenvolvido utilizando Python e recursos adicionais como:
+ - [tabulate](https://pypi.org/project/tabulate/);
+ - [mysql-connector](https://pypi.org/project/mysql-connector-python/)
+Este programa visa:
 - Facilitar o cálculo de preço de venda de produtos para sistemas de mercados;
 - Exibir dados relevantes ao produto, como onde se encaixa a margem de lucro.
 
@@ -10,6 +13,7 @@ A instalação deve ser feita seguindo estes passos:
 - Copiar o link do repositório e clonar o mesmo numa pasta da sua máquina;
 - Abrir o projeto em um editor de texto(recomendação: utilizar Visual Studio Code);
 - No terminal do Python, executar o comando 'pip install tabulate' para instalar a biblioteca tabulate;
+- Ainda no terminal, executar também o comando 'pip install mysql-connector-python' para instalar o driver mysql.
 - Executar o programa.
 
 # Dúvidas
