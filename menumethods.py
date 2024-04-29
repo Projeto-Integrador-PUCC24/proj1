@@ -1,24 +1,17 @@
-import main, time
+import time
 from db import host, user, password, database
+from main import conn, menu,  cls
 import tabulate, mysql.connector, ctypes
-main.products = []
-def con():
-   if (main.conn != None):
-      ctypes.windll.user32.MessageBoxW(0, "Conexão Efetuada com sucesso.", "Alerta do Sistema", 1)
-   else:
-      time.sleep(1)
-      ctypes.windll.user32.MessageBoxW(0, "Conexão falhou.", "Alerta do Sistema", 1)
-def pushProduct(cod, nome, desc, cp, ip, cf, cm, ml):
-  conn = con()
+
+def pushProduct(cod, nome, desc, cp, ip, cf, cv, ml):
   if conn != None:
     cursor = conn.cursor()
-    sql = "INSERT INTO products (cod, nome, desc, cp, ip, cf, cm, ml) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-    vals = (cod, nome, desc, cp, ip, cf, cm, ml)
+    sql = "INSERT INTO products (`cod`, `nome`, `desc`, `cp`, `ip`, `cf`, `cv`, `ml`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+    vals = (cod, nome, desc, cp, ip, cf, cv, ml)
     cursor.execute(sql, vals)
     conn.commit()
     cursor.close()
     conn.close()
-    print("Produto adicionado com sucesso!")
   else:
     print("Produto não foi adicionado. Por favor, tente novamente.")
 
@@ -89,21 +82,21 @@ def prodAdding():
             ["Rentabilidade", round(product_ml,2), product_ml_percent],
             ["Descrição da Margem de Lucro", product_mlDesc, product_ml_percent]
             ]
-      table2 = tabulate.tabulate(productDetails,headers = "firstrow", tablefmt = "grid")
+      table2 = tabulate.tabulate(productDetails,headers = "firstrow", tablefmt = "github")
       print(table2)
       products = [["Código", "Preço de Venda", "Margem de Lucro"],[product_id, round(sellingPrice,2), round(product_ml,2)]]
 
       print("\n\nVisão geral: ")
-      table1 = tabulate.tabulate(products,headers = "firstrow", tablefmt = "grid")
+      table1 = tabulate.tabulate(products,headers = "firstrow", tablefmt = "github")
       print(table1)
       pushProduct(product_id, product_name, product_desc, product_cost, product_tax_percent, product_cf_percent, product_cv_percent, product_ml_percent)
       print("\n\nProduto adicionado com sucesso!")
-      print("\n\nDeseja adicioanr outro produto?")
+      print("\n\nDeseja adicionar outro produto?")
       answer = input("[1] Sim\n[2] Não\n")
       if answer == "1":
         prodAdding()
       else:
-        main.menu() 
+        menu() 
       break
     except ValueError:
       print("\n\nValor inválido! Por favor, tente novamente.")
@@ -116,20 +109,19 @@ def prodListing():
       cursor = conn.cursor()
       cursor.execute("SELECT * FROM products")
       result = cursor.fetchall()
-      print("\n\nListing all products: ")
-      print("=============================================")
+      cls()
       for row in result:
-        prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"], [row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]]]
-        table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
+        prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"], \
+                       [row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]]]
+        table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "github")
         print(table)
       cursor.close()
-      conn.close()
       print("\n\nDeseja conferir os produtos novamente?")
       answer = input("[1] Sim\n[2] Não\n")
       if answer == "1":
         prodListing()
       else:
-        main.menu()
+        menu()
       break
     except ValueError:
       print("\n\nValor inválido. Por favor, tente novamente.")

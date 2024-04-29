@@ -4,17 +4,13 @@ products = []
 def cls():
     os.system("cls" if os.name == "nt" else "clear")
 conn = mysql.connector.connect(host = db.host, user = db.user, password = db.password, database = db.database)
+if (conn != None):
+          ctypes.windll.user32.MessageBoxW(0, "Connection successful.", "Success", 1)
+else:
+          ctypes.windll.user32.MessageBoxW(0, "Connection failed.", "Error", 1)
 def menu():
     while True:
       try:
-        if (menumethods.conn != None):
-          print("Connected succesfully.")
-          ctypes.windll.user32.MessageBoxW(0, "Connection successful.", "Success", 1)
-        else:
-          print("Connection failed.")
-          time.sleep(1)
-          ctypes.windll.user32.MessageBoxW(0, "Connection failed.", "Error", 1)
-
         print("\n\nEscolha uma opção.\n[1]Cadastrar produto.\n[2]Remover um produto.\n[3]Atualizar um produto.\n[4]Listar todos os produtos.\n[5]Buscar por um produto.\n[6]Sair.\n")
         menu = int(input("Digite o número da opção desejada: "))
         match menu:
