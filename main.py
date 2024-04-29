@@ -21,6 +21,7 @@ def menu():
           case 3:
             menumethods.prodUpdating()
           case 4:
+            cls()
             menumethods.prodListing()
           case 5:
             menumethods.prodSearching()

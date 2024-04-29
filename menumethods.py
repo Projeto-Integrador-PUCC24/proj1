@@ -108,13 +108,12 @@ def prodListing():
       conn = mysql.connector.connect(host = host, user = user, password = password, database = database)
       cursor = conn.cursor()
       cursor.execute("SELECT * FROM products")
-      result = cursor.fetchall()
-      cls()
+      result = cursor.fetchall()     
+      prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"]]
       for row in result:
-        prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"], \
-                       [row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]]]
-        table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "github")
-        print(table)
+        prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]])
+        table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
+      print(table)
       cursor.close()
       print("\n\nDeseja conferir os produtos novamente?")
       answer = input("[1] Sim\n[2] Não\n")
