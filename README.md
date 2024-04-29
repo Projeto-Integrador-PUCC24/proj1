@@ -3,6 +3,7 @@
 Este programa foi desenvolvido utilizando Python e recursos adicionais como:
  - [tabulate](https://pypi.org/project/tabulate/);
  - [mysql-connector](https://pypi.org/project/mysql-connector-python/)
+
 Este programa visa:
 - Facilitar o cálculo de preço de venda de produtos para sistemas de mercados;
 - Exibir dados relevantes ao produto, como onde se encaixa a margem de lucro.
