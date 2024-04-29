@@ -4,12 +4,10 @@ import tabulate, mysql.connector, ctypes
 main.products = []
 def con():
    if (main.conn != None):
-      print("Connected succesfully.")
-      ctypes.windll.user32.MessageBoxW(0, "Connection successful.", "Success", 1)
+      ctypes.windll.user32.MessageBoxW(0, "Conexão Efetuada com sucesso.", "Alerta do Sistema", 1)
    else:
-      print("Connection failed.")
       time.sleep(1)
-      ctypes.windll.user32.MessageBoxW(0, "Connection failed.", "Error", 1)
+      ctypes.windll.user32.MessageBoxW(0, "Conexão falhou.", "Alerta do Sistema", 1)
 def pushProduct(cod, nome, desc, cp, ip, cf, cm, ml):
   conn = con()
   if conn != None:
@@ -20,9 +18,9 @@ def pushProduct(cod, nome, desc, cp, ip, cf, cm, ml):
     conn.commit()
     cursor.close()
     conn.close()
-    print("Product added successfully!")
+    print("Produto adicionado com sucesso!")
   else:
-    print("Product not added. Connection failed.")
+    print("Produto não foi adicionado. Por favor, tente novamente.")
 
 
     
@@ -99,16 +97,16 @@ def prodAdding():
       table1 = tabulate.tabulate(products,headers = "firstrow", tablefmt = "grid")
       print(table1)
       pushProduct(product_id, product_name, product_desc, product_cost, product_tax_percent, product_cf_percent, product_cv_percent, product_ml_percent)
-      print("\n\nProduct added successfully!")
-      print("\n\nWant to add another product?")
-      answer = input("[1] Yes\n[2] No\n")
+      print("\n\nProduto adicionado com sucesso!")
+      print("\n\nDeseja adicioanr outro produto?")
+      answer = input("[1] Sim\n[2] Não\n")
       if answer == "1":
         prodAdding()
       else:
         main.menu() 
       break
     except ValueError:
-      print("\n\nInvalid value! Please try again.")
+      print("\n\nValor inválido! Por favor, tente novamente.")
       prodAdding()
 
 def prodListing():
@@ -121,25 +119,20 @@ def prodListing():
       print("\n\nListing all products: ")
       print("=============================================")
       for row in result:
-        print("Código: ", row[0])
-        print("Nome: ", row[1])
-        print("Descrição: ", row[2])
-        print("Custo: ", row[3])
-        print("Impostos: ", row[4])
-        print("Custo Fixo: ", row[5])
-        print("Comissão de Vendas: ", row[6])
-        print("Margem de Lucro: ", row[7])
-        print("=============================================")
+        prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"], [row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]]]
+        table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
+        print(table)
+      cursor.close()
       conn.close()
-      print("\n\nWant to list all products again?")
-      answer = input("[1] Yes\n[2] No\n")
+      print("\n\nDeseja conferir os produtos novamente?")
+      answer = input("[1] Sim\n[2] Não\n")
       if answer == "1":
         prodListing()
       else:
         main.menu()
       break
     except ValueError:
-      print("\n\nInvalid value! Please try again.")
+      print("\n\nValor inválido. Por favor, tente novamente.")
       prodListing()
   
 def prodRemoving():
