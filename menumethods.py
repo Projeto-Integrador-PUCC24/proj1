@@ -132,17 +132,37 @@ def prodListing():
       prodListing()
   
 def prodRemoving():
-  print("Não implementado.")
-
+  cursor = conn.cursor()
+  searchCode = (input("Insira o código do produto que deseja ver: "))
+  sql = "SELECT * FROM `products` WHERE cod = %s"
+  val = (searchCode, )
+  cursor.execute(sql, val)
+  result = cursor.fetchall()
+  prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"]]
+  for row in result:
+    prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]])
+    table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
+  print(table)
+  ans = input("\n\nEsse é o produto que você deseja remover? [1] Sim [2] Não\n")
+  match ans:
+    case "1":
+      sql = "DELETE FROM `products` WHERE cod = %s"
+      val = (searchCode, )
+      cursor.execute(sql, val)
+      conn.commit()
+      print("\n\n" + str(cursor.rowcount) + " produto removido com sucesso.")
+      cursor.close()
+      
 def prodUpdating():
   print("Não implementado.")
+      
   
 def prodSearching():
    while True:
     try:
       cursor = conn.cursor()
       searchCode = (input("Insira o código do produto que deseja ver: "))
-      sql = "SELECT `CP` FROM `products` WHERE cod = %s"
+      sql = "SELECT * FROM `products` WHERE cod = %s"
       val = (searchCode, )
       cursor.execute(sql, val)
       result = cursor.fetchall()
@@ -160,4 +180,3 @@ def prodSearching():
         print("\n\nOpção inválida. Por favor, tente novamente.")
     except ValueError:
       print("\n\nValor inválido. Por favor, tente novamente.")
-      prodUpdating()
