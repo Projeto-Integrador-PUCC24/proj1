@@ -151,7 +151,13 @@ def prodSearching():
         prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]])
         table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
       print(table)
-      cursor.close()
+      ans = input("\n\nEsse é o produto que você deseja ver? [1] Sim [2] Não\n")
+      if ans == "2":
+        prodSearching()
+      elif ans == "1":
+        cursor.close()
+      else:
+        print("\n\nOpção inválida. Por favor, tente novamente.")
     except ValueError:
       print("\n\nValor inválido. Por favor, tente novamente.")
       prodUpdating()
