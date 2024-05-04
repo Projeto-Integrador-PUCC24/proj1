@@ -3,15 +3,21 @@ from db import host, user, password, database
 from main import conn, menu,  cls
 import tabulate, mysql.connector, ctypes
 
+
 def pushProduct(cod, nome, desc, cp, ip, cf, cv, ml):
   if conn != None:
-    cursor = conn.cursor()
-    sql = "INSERT INTO products (`cod`, `nome`, `desc`, `cp`, `ip`, `cf`, `cv`, `ml`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-    vals = (cod, nome, desc, cp, ip, cf, cv, ml)
-    cursor.execute(sql, vals)
-    conn.commit()
-    cursor.close()
-    conn.close()
+      '''cursor = conn.cursor()
+      sql = "SHOW TABLES LIKE `products`"
+      cursor.execute(sql)
+      result = cursor.fetchone()
+      if result:'''
+      cursor = conn.cursor()
+      sql = "INSERT INTO products (`cod`, `nome`, `desc`, `cp`, `ip`, `cf`, `cv`, `ml`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+      vals = (cod, nome, desc, cp, ip, cf, cv, ml)
+      cursor.execute(sql, vals)
+      conn.commit()
+      cursor.close()
+      conn.close()
   else:
     print("Produto não foi adicionado. Por favor, tente novamente.")
 
@@ -105,7 +111,6 @@ def prodAdding():
 def prodListing():
   while True:
     try:
-      conn = mysql.connector.connect(host = host, user = user, password = password, database = database)
       cursor = conn.cursor()
       cursor.execute("SELECT * FROM products")
       result = cursor.fetchall()     
@@ -131,6 +136,22 @@ def prodRemoving():
 
 def prodUpdating():
   print("Não implementado.")
-
+  
 def prodSearching():
-  print("Não implementado.")
+   while True:
+    try:
+      cursor = conn.cursor()
+      searchCode = (input("Insira o código do produto que deseja ver: "))
+      sql = "SELECT `CP` FROM `products` WHERE cod = %s"
+      val = (searchCode, )
+      cursor.execute(sql, val)
+      result = cursor.fetchall()
+      prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"]]
+      for row in result:
+        prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]])
+        table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
+      print(table)
+      cursor.close()
+    except ValueError:
+      print("\n\nValor inválido. Por favor, tente novamente.")
+      prodUpdating()
