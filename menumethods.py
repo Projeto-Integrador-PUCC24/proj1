@@ -1,23 +1,35 @@
 import time
-from db import host, user, password, database
+from db import host, user, password, database, tbnull, insert
 from main import conn, menu,  cls
 import tabulate, mysql.connector, ctypes
 
 
 def pushProduct(cod, nome, desc, cp, ip, cf, cv, ml):
   if conn != None:
-      '''cursor = conn.cursor()
-      sql = "SHOW TABLES LIKE `products`"
+      cursor = conn.cursor()
+      sql = "SHOW TABLES LIKE 'products2'"
       cursor.execute(sql)
       result = cursor.fetchone()
-      if result:'''
-      cursor = conn.cursor()
-      sql = "INSERT INTO products (`cod`, `nome`, `desc`, `cp`, `ip`, `cf`, `cv`, `ml`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-      vals = (cod, nome, desc, cp, ip, cf, cv, ml)
-      cursor.execute(sql, vals)
-      conn.commit()
-      cursor.close()
-      conn.close()
+      if result:
+        cursor = conn.cursor()
+        sql = insert
+        vals = (cod, nome, desc, cp, ip, cf, cv, ml)
+        cursor.execute(sql, vals)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        print("Produto adicionado com sucesso!")
+      else:
+        sql = tbnull
+        cursor.execute(sql)
+        sql = insert
+        vals = (cod, nome, desc, cp, ip, cf, cv, ml)
+        cursor.execute(sql, vals)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        print("Produto adicionado com sucesso!")
+    
   else:
     print("Produto não foi adicionado. Por favor, tente novamente.")
 
