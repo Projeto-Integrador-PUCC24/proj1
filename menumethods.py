@@ -133,7 +133,7 @@ def prodListing():
   
 def prodRemoving():
   cursor = conn.cursor()
-  searchCode = (input("Insira o código do produto que deseja ver: "))
+  searchCode = (input("Insira o código do produto que deseja excluir: "))
   sql = "SELECT * FROM `products` WHERE cod = %s"
   val = (searchCode, )
   cursor.execute(sql, val)
