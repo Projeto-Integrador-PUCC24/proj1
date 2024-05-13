@@ -17,7 +17,6 @@ def pushProduct(cod, nome, desc, cp, ip, cf, cv, ml):
       cursor.execute(sql, vals)
       conn.commit()
       cursor.close()
-      conn.close()
   else:
     print("Produto não foi adicionado. Por favor, tente novamente.")
 
@@ -139,6 +138,9 @@ def prodRemoving():
   cursor.execute(sql, val)
   result = cursor.fetchall()
   prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"]]
+  if not result:
+    print("\n\nProduto não encontrado.")
+    prodRemoving()
   for row in result:
     prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]])
     table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
@@ -254,6 +256,14 @@ def prodSearching():
       cursor.execute(sql, val)
       result = cursor.fetchall()
       prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"]]
+      if not result:
+        print("\n\nProduto não encontrado.")
+        print("\n\nDeseja buscar por outro produto?")
+        answer = input("[1] Sim\n[2] Não\n")
+        if answer == "1":
+          prodSearching()
+        else:
+          menu()
       for row in result:
         prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]])
         table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")

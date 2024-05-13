@@ -5,9 +5,9 @@ def cls():
     os.system("cls" if os.name == "nt" else "clear")
 conn = mysql.connector.connect(host = db.host, user = db.user, password = db.password, database = db.database)
 if (conn != None):
-          ctypes.windll.user32.MessageBoxW(0, "Connection successful.", "Success", 1)
+          print("Connection successful.")
 else:
-          ctypes.windll.user32.MessageBoxW(0, "Connection failed.", "Error", 1)
+          print("Connection failed.")
 def menu():
     while True:
       try:
@@ -26,7 +26,9 @@ def menu():
           case 5:
             menumethods.prodSearching()
           case 6:
+            conn.close()
             print("\n\nFinalizando execução.")
+            exit()
           case _:
             print("\n\nOpção inválida.")
       except ValueError:
@@ -34,5 +36,6 @@ def menu():
         time.sleep(1)
         cls()
 if __name__ == "__main__":
+  time.sleep(1)
   cls()
   menu()
