@@ -1,35 +1,23 @@
 import time
-from db import host, user, password, database, tbnull, insert
+from db import host, user, password, database
 from main import conn, menu,  cls
 import tabulate, mysql.connector, ctypes
 
 
 def pushProduct(cod, nome, desc, cp, ip, cf, cv, ml):
   if conn != None:
-      cursor = conn.cursor()
-      sql = "SHOW TABLES LIKE 'products2'"
+      '''cursor = conn.cursor()
+      sql = "SHOW TABLES LIKE `products`"
       cursor.execute(sql)
       result = cursor.fetchone()
-      if result:
-        cursor = conn.cursor()
-        sql = insert
-        vals = (cod, nome, desc, cp, ip, cf, cv, ml)
-        cursor.execute(sql, vals)
-        conn.commit()
-        cursor.close()
-        conn.close()
-        print("Produto adicionado com sucesso!")
-      else:
-        sql = tbnull
-        cursor.execute(sql)
-        sql = insert
-        vals = (cod, nome, desc, cp, ip, cf, cv, ml)
-        cursor.execute(sql, vals)
-        conn.commit()
-        cursor.close()
-        conn.close()
-        print("Produto adicionado com sucesso!")
-    
+      if result:'''
+      cursor = conn.cursor()
+      sql = "INSERT INTO products (`cod`, `nome`, `desc`, `cp`, `ip`, `cf`, `cv`, `ml`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+      vals = (cod, nome, desc, cp, ip, cf, cv, ml)
+      cursor.execute(sql, vals)
+      conn.commit()
+      cursor.close()
+      conn.close()
   else:
     print("Produto não foi adicionado. Por favor, tente novamente.")
 
@@ -197,7 +185,7 @@ def prodUpdating():
               break
             case 2:
               newDesc = input("Insira a nova descrição do produto: ")
-              sql = "UPDATE `products` SET desc = %s WHERE cod = %s"
+              sql = "UPDATE `products` SET `desc` = %s WHERE cod = %s"
               val = (newDesc, searchCode)
               cursor.execute(sql, val)
               conn.commit()
@@ -254,7 +242,8 @@ def prodUpdating():
           print("\n\nOpção inválida. Por favor, tente novamente.")
     except ValueError:
       print("\n\nValor inválido. Por favor, tente novamente.")
-          
+      prodUpdating()
+
 def prodSearching():
    while True:
     try:
@@ -271,9 +260,20 @@ def prodSearching():
       print(table)
       ans = input("\n\nEsse é o produto que você deseja ver? [1] Sim [2] Não\n")
       if ans == "2":
-        prodSearching()
+        print("\n\nDeseja buscar por outro produto?")
+        answer = input("[1] Sim\n[2] Não\n")
+        if answer == "1":
+          prodSearching()
+        else:
+          menu()
       elif ans == "1":
         cursor.close()
+        print("\n\nDeseja buscar por outro produto?")
+        answer = input("[1] Sim\n[2] Não\n")
+        if answer == "1":
+          prodSearching()
+        else:
+          menu()
       else:
         print("\n\nOpção inválida. Por favor, tente novamente.")
     except ValueError:
