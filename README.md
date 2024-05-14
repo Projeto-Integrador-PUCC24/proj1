@@ -6,7 +6,11 @@ Este programa foi desenvolvido utilizando Python e recursos adicionais como:
 
 Este programa visa:
 - Facilitar o cálculo de preço de venda de produtos para sistemas de mercados;
-- Exibir dados relevantes ao produto, como onde se encaixa a margem de lucro.
+- Exibir dados relevantes ao produto, como onde se encaixa a margem de lucro;
+- Atualizar dados do produto, exceto seu código;
+- Buscar por um produto específico;
+- Excluir produtos do estoque.
+
 
 # Instalação e execução
 A instalação deve ser feita seguindo estes passos:
