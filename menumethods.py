@@ -6,11 +6,6 @@ import tabulate, mysql.connector, ctypes
 
 def pushProduct(cod, nome, desc, cp, ip, cf, cv, ml):
   if conn != None:
-      '''cursor = conn.cursor()
-      sql = "SHOW TABLES LIKE `products`"
-      cursor.execute(sql)
-      result = cursor.fetchone()
-      if result:'''
       cursor = conn.cursor()
       sql = "INSERT INTO products (`cod`, `nome`, `desc`, `cp`, `ip`, `cf`, `cv`, `ml`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
       vals = (cod, nome, desc, cp, ip, cf, cv, ml)
