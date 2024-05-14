@@ -22,6 +22,14 @@ def prodAdding():
     try:
       product_id = input("Insira o código do produto: ")
       product_id = int(product_id)
+      if conn != None:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM products")
+        result = cursor.fetchall()
+        for row in result:
+          if product_id == row[0]:
+            print("\n\nCódigo já existente. Por favor, insira um código diferente.")
+            prodAdding()
       if(product_id < 0):
         print("\n\nCódigo inválido!")
         prodAdding()
@@ -110,7 +118,21 @@ def prodListing():
       result = cursor.fetchall()     
       prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"]]
       for row in result:
-        prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]])
+        if (row[7] > 20):
+          ml_desc = "Lucro alto"
+        elif (row[7] > 10 and row[7] <= 20):
+          ml_desc = "Lucro médio"
+        elif (row[7] > 0 and row[7] < 10):
+          ml_desc = "Lucro baixo"
+        elif (row[7] == 0):
+          ml_desc = "Equilíbrio"
+        elif (row[7] < 0):
+          ml_desc = "Prejuízo"
+        grossIncome_percent = row[5] + row[6] + row[4] + row[7]
+        grossIncome_percentCalc = (grossIncome_percent / 100) * row[3]
+        div = 1 - (grossIncome_percentCalc / row[3])
+        sellingPrice = row[3] / div
+        prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7],ml_desc, sellingPrice])
         table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
       print(table)
       cursor.close()
@@ -154,89 +176,100 @@ def prodUpdating():
   while True:
     try:
       cursor = conn.cursor()
-      searchCode = (input("Insira o código do produto que deseja atualizar: "))
-      sql = "SELECT * FROM `products` WHERE cod = %s"
-      val = (searchCode, )
-      cursor.execute(sql, val)
-      result = cursor.fetchall()
-      prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"]]
-      for row in result:
-        prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]])
-        table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
-      print(table)
-      ans = input("\n\nEsse é o produto que você deseja atualizar? [1] Sim [2] Não\n")
-      match ans:
-        case "2":
-          prodUpdating()
-        case "1":
-          desired = int(input("O que você deseja atualizar?\n[1] Nome\n[2] Descrição\n[3] Custo\n[4] Impostos\n[5] Custo Fixo\n[6] Comissão de Vendas\n[7] Margem de Lucro\n[8] Cancelar\n"))
-          match desired:
-            case 1:
-              newName = input("Insira o novo nome do produto: ")
-              sql = "UPDATE `products` SET nome = %s WHERE cod = %s"
-              val = (newName, searchCode)
-              cursor.execute(sql, val)
-              conn.commit()
-              print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
-              cursor.close()
-              break
-            case 2:
-              newDesc = input("Insira a nova descrição do produto: ")
-              sql = "UPDATE `products` SET `desc` = %s WHERE cod = %s"
-              val = (newDesc, searchCode)
-              cursor.execute(sql, val)
-              conn.commit()
-              print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
-              cursor.close()
-              break
-            case 3:
-              newCost = float(input("Insira o novo custo do produto: "))
-              sql = "UPDATE `products` SET cost = %s WHERE cod = %s"
-              val = (newCost, searchCode)
-              cursor.execute(sql, val)
-              conn.commit()
-              print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
-              cursor.close()
-              break
-            case 4:
-              newTax = float(input("Insira o novo valor dos impostos: "))
-              sql = "UPDATE `products` SET tax = %s WHERE cod = %s"
-              val = (newTax, searchCode)
-              cursor.execute(sql, val)
-              conn.commit()
-              print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
-              cursor.close()
-              break
-            case 5:
-              newCF = float(input("Insira o novo custo fixo do produto: "))
-              sql = "UPDATE `products` SET cf = %s WHERE cod = %s"
-              val = (newCF, searchCode)
-              cursor.execute(sql, val)
-              conn.commit()
-              print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
-              cursor.close()
-              break
-            case 6:
-              newCV = float(input("Insira a nova comissão de vendas: "))
-              sql = "UPDATE `products` SET cv = %s WHERE cod = %s"
-              val = (newCV, searchCode)
-              cursor.execute(sql, val)
-              conn.commit()
-              print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
-              cursor.close()
-              break
-            case 7:
-              newML = float(input("Insira a nova margem de lucro: "))
-              sql = "UPDATE `products` SET ml = %s WHERE cod = %s"
-              val = (newML, searchCode)
-              cursor.execute(sql, val)
-              conn.commit()
-              print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
-              cursor.close()
-              break
-          cursor.close()
-        case _:
-          print("\n\nOpção inválida. Por favor, tente novamente.")
+      searchCode = int (input("Insira o código do produto que deseja atualizar(Digite 0 para voltar para o menu): "))
+      if searchCode == 0:
+        menu()
+      else:
+        sql = "SELECT * FROM `products` WHERE cod = %s"
+        val = (searchCode, )
+        cursor.execute(sql, val)
+        result = cursor.fetchall()
+        prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"]]
+        if not result:
+          print("\n\nProduto não encontrado.")
+          print("\n\nDeseja buscar por outro produto?")
+          answer = input("[1] Sim\n[2] Não\n")
+          if answer == "1":
+            prodUpdating()
+          else:
+            menu()
+        for row in result:
+          prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]])
+          table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
+          print(table)
+        ans = input("\n\nEsse é o produto que você deseja atualizar? [1] Sim [2] Não\n")
+        match ans:
+          case "2":
+            prodUpdating()
+          case "1":
+            desired = int(input("O que você deseja atualizar?\n[1] Nome\n[2] Descrição\n[3] Custo\n[4] Impostos\n[5] Custo Fixo\n[6] Comissão de Vendas\n[7] Margem de Lucro\n[8] Cancelar\n"))
+            match desired:
+              case 1:
+                newName = input("Insira o novo nome do produto: ")
+                sql = "UPDATE `products` SET nome = %s WHERE cod = %s"
+                val = (newName, searchCode)
+                cursor.execute(sql, val)
+                conn.commit()
+                print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
+                cursor.close()
+                break
+              case 2:
+                newDesc = input("Insira a nova descrição do produto: ")
+                sql = "UPDATE `products` SET `desc` = %s WHERE cod = %s"
+                val = (newDesc, searchCode)
+                cursor.execute(sql, val)
+                conn.commit()
+                print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
+                cursor.close()
+                break
+              case 3:
+                newCost = float(input("Insira o novo custo do produto: "))
+                sql = "UPDATE `products` SET cp = %s WHERE cod = %s"
+                val = (newCost, searchCode)
+                cursor.execute(sql, val)
+                conn.commit()
+                print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
+                cursor.close()
+                break
+              case 4:
+                newTax = float(input("Insira o novo valor dos impostos: "))
+                sql = "UPDATE `products` SET ip = %s WHERE cod = %s"
+                val = (newTax, searchCode)
+                cursor.execute(sql, val)
+                conn.commit()
+                print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
+                cursor.close()
+                break
+              case 5:
+                newCF = float(input("Insira o novo custo fixo do produto: "))
+                sql = "UPDATE `products` SET cf = %s WHERE cod = %s"
+                val = (newCF, searchCode)
+                cursor.execute(sql, val)
+                conn.commit()
+                print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
+                cursor.close()
+                break
+              case 6:
+                newCV = float(input("Insira a nova comissão de vendas: "))
+                sql = "UPDATE `products` SET cv = %s WHERE cod = %s"
+                val = (newCV, searchCode)
+                cursor.execute(sql, val)
+                conn.commit()
+                print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
+                cursor.close()
+                break
+              case 7:
+                newML = float(input("Insira a nova margem de lucro: "))
+                sql = "UPDATE `products` SET ml = %s WHERE cod = %s"
+                val = (newML, searchCode)
+                cursor.execute(sql, val)
+                conn.commit()
+                print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
+                cursor.close()
+                break
+            cursor.close()
+          case _:
+            print("\n\nOpção inválida. Por favor, tente novamente.")
     except ValueError:
       print("\n\nValor inválido. Por favor, tente novamente.")
       prodUpdating()
@@ -250,7 +283,7 @@ def prodSearching():
       val = (searchCode, )
       cursor.execute(sql, val)
       result = cursor.fetchall()
-      prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"]]
+      prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro", "Descrição da Margem de Lucro", "Preço de Venda"]]
       if not result:
         print("\n\nProduto não encontrado.")
         print("\n\nDeseja buscar por outro produto?")
@@ -260,7 +293,21 @@ def prodSearching():
         else:
           menu()
       for row in result:
-        prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]])
+        if (row[7] > 20):
+          ml_desc = "Lucro alto"
+        elif (row[7] > 10 and row[7] <= 20):
+          ml_desc = "Lucro médio"
+        elif (row[7] > 0 and row[7] < 10):
+          ml_desc = "Lucro baixo"
+        elif (row[7] == 0):
+          ml_desc = "Equilíbrio"
+        elif (row[7] < 0):
+          ml_desc = "Prejuízo"
+        grossIncome_percent = row[5] + row[6] + row[4] + row[7]
+        grossIncome_percentCalc = (grossIncome_percent / 100) * row[3]
+        div = 1 - (grossIncome_percentCalc / row[3])
+        sellingPrice = row[3] / div
+        prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7],ml_desc, sellingPrice])
         table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
       print(table)
       ans = input("\n\nEsse é o produto que você deseja ver? [1] Sim [2] Não\n")
