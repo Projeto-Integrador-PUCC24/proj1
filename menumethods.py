@@ -108,9 +108,23 @@ def prodListing():
       cursor = conn.cursor()
       cursor.execute("SELECT * FROM products")
       result = cursor.fetchall()     
-      prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"]]
+      prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro", "Descrição da Margem de Lucro", "Preço de Venda"]]
       for row in result:
-        prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]])
+        if (row[7] > 20):
+          ml_desc = "Lucro alto"
+        elif (row[7] > 10 and row[7] <= 20):
+          ml_desc = "Lucro médio"
+        elif (row[7] > 0 and row[7] < 10):
+          ml_desc = "Lucro baixo"
+        elif (row[7] == 0):
+          ml_desc = "Equilíbrio"
+        elif (row[7] < 0):
+          ml_desc = "Prejuízo"
+        grossIncome_percent = row[5] + row[6] + row[4] + row[7]
+        grossIncome_percentCalc = (grossIncome_percent / 100) * row[3]
+        div = 1 - (grossIncome_percentCalc / row[3])
+        sellingPrice = row[3] / div
+        prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7],ml_desc, sellingPrice])
         table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
       print(table)
       cursor.close()
@@ -250,7 +264,7 @@ def prodSearching():
       val = (searchCode, )
       cursor.execute(sql, val)
       result = cursor.fetchall()
-      prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"]]
+      prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro", "Descrição da Margem de Lucro", "Preço de Venda"]]
       if not result:
         print("\n\nProduto não encontrado.")
         print("\n\nDeseja buscar por outro produto?")
@@ -260,7 +274,21 @@ def prodSearching():
         else:
           menu()
       for row in result:
-        prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]])
+        if (row[7] > 20):
+          ml_desc = "Lucro alto"
+        elif (row[7] > 10 and row[7] <= 20):
+          ml_desc = "Lucro médio"
+        elif (row[7] > 0 and row[7] < 10):
+          ml_desc = "Lucro baixo"
+        elif (row[7] == 0):
+          ml_desc = "Equilíbrio"
+        elif (row[7] < 0):
+          ml_desc = "Prejuízo"
+        grossIncome_percent = row[5] + row[6] + row[4] + row[7]
+        grossIncome_percentCalc = (grossIncome_percent / 100) * row[3]
+        div = 1 - (grossIncome_percentCalc / row[3])
+        sellingPrice = row[3] / div
+        prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7],ml_desc, sellingPrice])
         table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
       print(table)
       ans = input("\n\nEsse é o produto que você deseja ver? [1] Sim [2] Não\n")
