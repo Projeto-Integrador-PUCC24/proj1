@@ -103,7 +103,7 @@ def prodListing():
     try:
       cursor = conn.cursor()
       cursor.execute("SELECT * FROM products")
-      result = cursor.fetchall()     
+      result = cursor.fetchall()
       for row in result:
         if (row[7] > 20):
           ml_desc = "Lucro alto"
@@ -129,12 +129,12 @@ def prodListing():
         product_tax_percent = (product_tax * sellingPrice) / 100
         product_cf_percent = (product_cf * sellingPrice) / 100
         product_cv_percent = (product_cv * sellingPrice) / 100
-        others_percent = (others / sellingPrice) * 100
+        others_percent = (others * sellingPrice) / 100
         product_ml_percent = (sellingPrice * product_ml) /100
-        prodDetails = [["Coluna", "Valor", "%"],
-                 ["Código", row[1], ],
-                 ["Nome", row[2], ],
-                 ["Descrição", row[3], ],
+        prodDetails = [["Descrição", "Valor", "%"],
+                 ["Código", row[0], ],
+                 ["Nome", row[1], ],
+                 ["Descrição", row[2], ],
                  ["Preço de Venda", round(sellingPrice,2), sellingPrice_percent],
                  ["Custo", round(product_cost,2), product_cost_percent],
                  ["Receita Bruta", round(grossIncome,2), grossIncome_percent],
@@ -144,7 +144,7 @@ def prodListing():
                  ["Outros custos", round(others_percent,2), others],
                  ["Margem de Lucro", round(product_ml_percent,2), product_ml],
                  ["Descrição da Margem de Lucro",ml_desc]]
-        table = tabulate.tabulate(prodDetails, headers="firstrow", tablefmt="grid")
+        table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
       print(table)
       cursor.close()
       print("\n\nDeseja conferir os produtos novamente?")
@@ -195,7 +195,7 @@ def prodRemoving():
         product_cv_percent = (product_cv / sellingPrice) * 100
         others_percent = (others / sellingPrice) * 100
         product_ml_percent = (product_ml / sellingPrice) * 100
-        prodDetails = [["Coluna", "Valor", "%"],
+        prodDetails = [["Descrição", "Valor", "%"],
                  ["Código", row[1], ],
                  ["Nome", row[2], ],
                  ["Descrição", row[3], ],
@@ -256,7 +256,7 @@ def prodUpdating():
         product_cv_percent = (product_cv / sellingPrice) * 100
         others_percent = (others / sellingPrice) * 100
         product_ml_percent = (product_ml / sellingPrice) * 100
-        prodDetails = [["Coluna", "Valor", "%"],
+        prodDetails = [["Descrição", "Valor", "%"],
                  ["Código", row[1], ],
                  ["Nome", row[2], ],
                  ["Descrição", row[3], ],
@@ -357,6 +357,7 @@ def prodSearching():
       val = (searchCode, )
       cursor.execute(sql, val)
       result = cursor.fetchall()
+      prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"]]
       if not result:
         print("\n\nProduto não encontrado.")
         print("\n\nDeseja buscar por outro produto?")
@@ -392,7 +393,7 @@ def prodSearching():
         product_cv_percent = (product_cv * sellingPrice) / 100
         others_percent = (others * sellingPrice) / 100
         product_ml_percent = (sellingPrice * product_ml) /100
-        prodDetails = [["Coluna", "Valor", "%"],
+        prodDetails = [["Descrição", "Valor", "%"],
                  ["Código", row[1], ],
                  ["Nome", row[2], ],
                  ["Descrição", row[3], ],
