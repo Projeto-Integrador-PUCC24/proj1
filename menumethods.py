@@ -145,7 +145,7 @@ def prodListing():
                  ["Margem de Lucro", round(product_ml_percent,2), product_ml],
                  ["Descrição da Margem de Lucro",ml_desc]]
         table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
-      print(table)
+        print(table)
       cursor.close()
       print("\n\nDeseja conferir os produtos novamente?")
       answer = input("[1] Sim\n[2] Não\n")
