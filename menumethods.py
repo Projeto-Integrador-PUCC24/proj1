@@ -126,22 +126,23 @@ def prodListing():
         sellingPrice_percent = (sellingPrice / sellingPrice) * 100
         product_cost_percent = (product_cost / sellingPrice) * 100
         grossIncome_percent = (grossIncome / sellingPrice) * 100
-        product_tax_percent = (product_tax / sellingPrice) * 100
-        product_cf_percent = (product_cf / sellingPrice) * 100
-        product_cv_percent = (product_cv / sellingPrice) * 100
+        product_tax_percent = (product_tax * sellingPrice) / 100
+        product_cf_percent = (product_cf * sellingPrice) / 100
+        product_cv_percent = (product_cv * sellingPrice) / 100
         others_percent = (others / sellingPrice) * 100
-        product_ml_percent = (product_ml / sellingPrice) * 100
-        prodDetails = [["Código", row[1]],
-                 ["Nome", row[2]],
-                 ["Descrição", row[3]],
+        product_ml_percent = (sellingPrice * product_ml) /100
+        prodDetails = [["Coluna", "Valor", "%"],
+                 ["Código", row[1], ],
+                 ["Nome", row[2], ],
+                 ["Descrição", row[3], ],
                  ["Preço de Venda", round(sellingPrice,2), sellingPrice_percent],
                  ["Custo", round(product_cost,2), product_cost_percent],
                  ["Receita Bruta", round(grossIncome,2), grossIncome_percent],
-                 ["Custo Fixo", round(product_cf,2), product_cf_percent],
-                 ["Comissão de Vendas", round(product_cv,2), product_cv_percent],
-                 ["Impostos", round(product_tax,2), product_tax_percent],
-                 ["Outros custos", round(others,2), others_percent],
-                 ["Margem de Lucro", round(product_ml,2), product_ml_percent],
+                 ["Custo Fixo", round(product_cf_percent,2), product_cf],
+                 ["Comissão de Vendas", round(product_cv_percent,2), product_cv],
+                 ["Impostos", round(product_tax_percent,2), product_tax],
+                 ["Outros custos", round(others_percent,2), others],
+                 ["Margem de Lucro", round(product_ml_percent,2), product_ml],
                  ["Descrição da Margem de Lucro",ml_desc]]
         table = tabulate.tabulate(prodDetails, headers="firstrow", tablefmt="grid")
       print(table)
@@ -164,13 +165,50 @@ def prodRemoving():
   val = (searchCode, )
   cursor.execute(sql, val)
   result = cursor.fetchall()
-  prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"]]
   if not result:
     print("\n\nProduto não encontrado.")
     prodRemoving()
   for row in result:
-    prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]])
-    table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
+        if (row[7] > 20):
+          ml_desc = "Lucro alto"
+        elif (row[7] > 10 and row[7] <= 20):
+          ml_desc = "Lucro médio"
+        elif (row[7] > 0 and row[7] < 10):
+          ml_desc = "Lucro baixo"
+        elif (row[7] == 0):
+          ml_desc = "Equilíbrio"
+        elif (row[7] < 0):
+          ml_desc = "Prejuízo"  
+        sellingPrice = row[3] / (1 - ((row[5] + row[6] + row[4] + row[7]) / 100))
+        grossIncome = sellingPrice - row[3]
+        others = row[5] + row[6] + row[4]
+        product_cost = row[3]
+        product_tax = row[4]
+        product_cf = row[5]
+        product_cv = row[6]
+        product_ml = row[7]
+        sellingPrice_percent = (sellingPrice / sellingPrice) * 100
+        product_cost_percent = (product_cost / sellingPrice) * 100
+        grossIncome_percent = (grossIncome / sellingPrice) * 100
+        product_tax_percent = (product_tax / sellingPrice) * 100
+        product_cf_percent = (product_cf / sellingPrice) * 100
+        product_cv_percent = (product_cv / sellingPrice) * 100
+        others_percent = (others / sellingPrice) * 100
+        product_ml_percent = (product_ml / sellingPrice) * 100
+        prodDetails = [["Coluna", "Valor", "%"],
+                 ["Código", row[1], ],
+                 ["Nome", row[2], ],
+                 ["Descrição", row[3], ],
+                 ["Preço de Venda", round(sellingPrice,2), sellingPrice_percent],
+                 ["Custo", round(product_cost,2), product_cost_percent],
+                 ["Receita Bruta", round(grossIncome,2), grossIncome_percent],
+                 ["Custo Fixo", round(product_cf_percent,2), product_cf],
+                 ["Comissão de Vendas", round(product_cv_percent,2), product_cv],
+                 ["Impostos", round(product_tax_percent,2), product_tax],
+                 ["Outros custos", round(others_percent,2), others],
+                 ["Margem de Lucro", round(product_ml_percent,2), product_ml],
+                 ["Descrição da Margem de Lucro",ml_desc]]
+        table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
   print(table)
   ans = input("\n\nEsse é o produto que você deseja remover? [1] Sim [2] Não\n")
   match ans:
@@ -191,9 +229,46 @@ def prodUpdating():
       val = (searchCode, )
       cursor.execute(sql, val)
       result = cursor.fetchall()
-      prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro"]]
       for row in result:
-        prodDetails.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]])
+        if (row[7] > 20):
+          ml_desc = "Lucro alto"
+        elif (row[7] > 10 and row[7] <= 20):
+          ml_desc = "Lucro médio"
+        elif (row[7] > 0 and row[7] < 10):
+          ml_desc = "Lucro baixo"
+        elif (row[7] == 0):
+          ml_desc = "Equilíbrio"
+        elif (row[7] < 0):
+          ml_desc = "Prejuízo"  
+        sellingPrice = row[3] / (1 - ((row[5] + row[6] + row[4] + row[7]) / 100))
+        grossIncome = sellingPrice - row[3]
+        others = row[5] + row[6] + row[4]
+        product_cost = row[3]
+        product_tax = row[4]
+        product_cf = row[5]
+        product_cv = row[6]
+        product_ml = row[7]
+        sellingPrice_percent = (sellingPrice / sellingPrice) * 100
+        product_cost_percent = (product_cost / sellingPrice) * 100
+        grossIncome_percent = (grossIncome / sellingPrice) * 100
+        product_tax_percent = (product_tax / sellingPrice) * 100
+        product_cf_percent = (product_cf / sellingPrice) * 100
+        product_cv_percent = (product_cv / sellingPrice) * 100
+        others_percent = (others / sellingPrice) * 100
+        product_ml_percent = (product_ml / sellingPrice) * 100
+        prodDetails = [["Coluna", "Valor", "%"],
+                 ["Código", row[1], ],
+                 ["Nome", row[2], ],
+                 ["Descrição", row[3], ],
+                 ["Preço de Venda", round(sellingPrice,2), sellingPrice_percent],
+                 ["Custo", round(product_cost,2), product_cost_percent],
+                 ["Receita Bruta", round(grossIncome,2), grossIncome_percent],
+                 ["Custo Fixo", round(product_cf_percent,2), product_cf],
+                 ["Comissão de Vendas", round(product_cv_percent,2), product_cv],
+                 ["Impostos", round(product_tax_percent,2), product_tax],
+                 ["Outros custos", round(others_percent,2), others],
+                 ["Margem de Lucro", round(product_ml_percent,2), product_ml],
+                 ["Descrição da Margem de Lucro",ml_desc]]
         table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
       print(table)
       ans = input("\n\nEsse é o produto que você deseja atualizar? [1] Sim [2] Não\n")
@@ -282,7 +357,6 @@ def prodSearching():
       val = (searchCode, )
       cursor.execute(sql, val)
       result = cursor.fetchall()
-      prodDetails = [["Código", "Nome", "Descrição", "Custo", "Impostos", "Custo Fixo", "Comissão de Vendas", "Margem de Lucro", "Descrição da Margem de Lucro", "Preço de Venda"]]
       if not result:
         print("\n\nProduto não encontrado.")
         print("\n\nDeseja buscar por outro produto?")
@@ -313,22 +387,23 @@ def prodSearching():
         sellingPrice_percent = (sellingPrice / sellingPrice) * 100
         product_cost_percent = (product_cost / sellingPrice) * 100
         grossIncome_percent = (grossIncome / sellingPrice) * 100
-        product_tax_percent = (product_tax / sellingPrice) * 100
-        product_cf_percent = (product_cf / sellingPrice) * 100
-        product_cv_percent = (product_cv / sellingPrice) * 100
-        others_percent = (others / sellingPrice) * 100
-        product_ml_percent = (product_ml / sellingPrice) * 100
-        prodDetails = [["Código", row[1]],
-                 ["Nome", row[2]],
-                 ["Descrição", row[3]],
+        product_tax_percent = (product_tax * sellingPrice) / 100
+        product_cf_percent = (product_cf * sellingPrice) / 100
+        product_cv_percent = (product_cv * sellingPrice) / 100
+        others_percent = (others * sellingPrice) / 100
+        product_ml_percent = (sellingPrice * product_ml) /100
+        prodDetails = [["Coluna", "Valor", "%"],
+                 ["Código", row[1], ],
+                 ["Nome", row[2], ],
+                 ["Descrição", row[3], ],
                  ["Preço de Venda", round(sellingPrice,2), sellingPrice_percent],
                  ["Custo", round(product_cost,2), product_cost_percent],
                  ["Receita Bruta", round(grossIncome,2), grossIncome_percent],
-                 ["Custo Fixo", round(product_cf,2), product_cf_percent],
-                 ["Comissão de Vendas", round(product_cv,2), product_cv_percent],
-                 ["Impostos", round(product_tax,2), product_tax_percent],
-                 ["Outros custos", round(others,2), others_percent],
-                 ["Margem de Lucro", round(product_ml,2), product_ml_percent],
+                 ["Custo Fixo", round(product_cf_percent,2), product_cf],
+                 ["Comissão de Vendas", round(product_cv_percent,2), product_cv],
+                 ["Impostos", round(product_tax_percent,2), product_tax],
+                 ["Outros custos", round(others_percent,2), others],
+                 ["Margem de Lucro", round(product_ml_percent,2), product_ml],
                  ["Descrição da Margem de Lucro",ml_desc]]
         table = tabulate.tabulate(prodDetails, headers = "firstrow", tablefmt = "grid")
       print(table)
