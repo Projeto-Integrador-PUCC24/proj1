@@ -69,8 +69,9 @@ def prodAdding():
       others_percent = (others / sellingPrice) * 100
       print("=============================================")
       print("\n\nVisão detalhada: ")
+      product_cost_percent = (product_cost / sellingPrice) * 100
       productDetails = [["Descrição", "Valor", "%"],["Preço de Venda", round(sellingPrice,2), 100],
-            ["Custo de aquisição", round(product_cost,2), sellingPrice_percent ],
+            ["Custo de aquisição", round(product_cost,2), product_cost_percent ],
             ["Receita Bruta", round(grossIncome, 2), grossIncome_percent],
             ["Custo Fixo", round(product_cf,2), product_cf_percent],
             ["Comissão de Vendas", round(product_cv,2), product_cv_percent],
@@ -79,13 +80,9 @@ def prodAdding():
             ["Rentabilidade", round(product_ml,2), product_ml_percent],
             ["Descrição da Margem de Lucro", product_mlDesc, product_ml_percent]
             ]
-      table2 = tabulate.tabulate(productDetails,headers = "firstrow", tablefmt = "github")
-      print(table2)
-      products = [["Código", "Preço de Venda", "Margem de Lucro"],[product_id, round(sellingPrice,2), round(product_ml,2)]]
-
-      print("\n\nVisão geral: ")
-      table1 = tabulate.tabulate(products,headers = "firstrow", tablefmt = "github")
+      table1 = tabulate.tabulate(productDetails,headers = "firstrow", tablefmt = "github")
       print(table1)
+      products = [["Código", "Preço de Venda", "Margem de Lucro"],[product_id, round(sellingPrice,2), round(product_ml,2)]]
       pushProduct(product_id, product_name, product_desc, product_cost, product_tax_percent, product_cf_percent, product_cv_percent, product_ml_percent)
       print("\n\nProduto adicionado com sucesso!")
       print("\n\nDeseja adicionar outro produto?")
@@ -288,7 +285,6 @@ def prodUpdating():
                 conn.commit()
                 print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
                 cursor.close()
-                break
               case 2:
                 newDesc = input("Insira a nova descrição do produto: ")
                 sql = "UPDATE `products` SET `desc` = %s WHERE cod = %s"
@@ -297,7 +293,6 @@ def prodUpdating():
                 conn.commit()
                 print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
                 cursor.close()
-                break
               case 3:
                 newCost = float(input("Insira o novo custo do produto: "))
                 sql = "UPDATE `products` SET cost = %s WHERE cod = %s"
@@ -306,7 +301,6 @@ def prodUpdating():
                 conn.commit()
                 print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
                 cursor.close()
-                break
               case 4:
                 newTax = float(input("Insira o novo valor dos impostos: "))
                 sql = "UPDATE `products` SET tax = %s WHERE cod = %s"
@@ -315,7 +309,6 @@ def prodUpdating():
                 conn.commit()
                 print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
                 cursor.close()
-                break
               case 5:
                 newCF = float(input("Insira o novo custo fixo do produto: "))
                 sql = "UPDATE `products` SET cf = %s WHERE cod = %s"
@@ -324,7 +317,6 @@ def prodUpdating():
                 conn.commit()
                 print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
                 cursor.close()
-                break
               case 6:
                 newCV = float(input("Insira a nova comissão de vendas: "))
                 sql = "UPDATE `products` SET cv = %s WHERE cod = %s"
@@ -333,7 +325,6 @@ def prodUpdating():
                 conn.commit()
                 print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
                 cursor.close()
-                break
               case 7:
                 newML = float(input("Insira a nova margem de lucro: "))
                 sql = "UPDATE `products` SET ml = %s WHERE cod = %s"
@@ -342,7 +333,6 @@ def prodUpdating():
                 conn.commit()
                 print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
                 cursor.close()
-                break
             cursor.close()
           case _:
             print("\n\nOpção inválida. Por favor, tente novamente.")
