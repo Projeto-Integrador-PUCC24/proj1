@@ -19,7 +19,8 @@ A instalação deve ser feita seguindo estes passos:
 - Abrir o projeto em um editor de texto(recomendação: utilizar Visual Studio Code);
 - No terminal do Python, executar o comando 'pip install tabulate' para instalar a biblioteca tabulate;
 - Ainda no terminal, executar também o comando 'pip install mysql-connector-python' para instalar o driver mysql.
-- Executar o programa.
+- Criar um arquivo com configurações de banco de dados(sendo estas host, username, password, database. Exemplo: "host = 'localhost'","username = 'root'", "password = 'default'", "database = 'sys'").
+- Executar o programa(a partir do arquivo main.py).
 
 # Dúvidas
 ### O programa pode ser executado em qualquer sistema operacional?
