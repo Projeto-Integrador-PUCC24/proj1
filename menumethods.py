@@ -80,7 +80,7 @@ def prodAdding():
             ["Rentabilidade", round(product_ml,2), product_ml_percent],
             ["Descrição da Margem de Lucro", product_mlDesc, product_ml_percent]
             ]
-      table1 = tabulate.tabulate(productDetails,headers = "firstrow", tablefmt = "github")
+      table1 = tabulate.tabulate(productDetails,headers = "firstrow", tablefmt = "grid")
       print(table1)
       products = [["Código", "Preço de Venda", "Margem de Lucro"],[product_id, round(sellingPrice,2), round(product_ml,2)]]
       pushProduct(product_id, product_name, product_desc, product_cost, product_tax_percent, product_cf_percent, product_cv_percent, product_ml_percent)
@@ -160,69 +160,75 @@ def prodListing():
   
 def prodRemoving():
   cursor = conn.cursor()
-  searchCode = (input("Insira o código do produto que deseja excluir: "))
-  sql = "SELECT * FROM `products` WHERE cod = %s"
-  val = (searchCode, )
-  cursor.execute(sql, val)
-  result = cursor.fetchall()
-  if not result:
-    print("\n\nProduto não encontrado.")
-    prodRemoving()
-  for row in result:
-      if (row[7] > 20):
-        ml_desc = "Lucro alto"
-      elif (row[7] > 10 and row[7] <= 20):
-        ml_desc = "Lucro médio"
-      elif (row[7] > 0 and row[7] < 10):
-        ml_desc = "Lucro baixo"
-      elif (row[7] == 0):
-        ml_desc = "Equilíbrio"
-      elif (row[7] < 0):
-        ml_desc = "Prejuízo"  
-      sellingPrice = row[3] / (1 - ((row[5] + row[6] + row[4] + row[7]) / 100))
-      grossIncome = sellingPrice - row[3]
-      others = row[5] + row[6] + row[4]
-      product_cost = row[3]
-      product_tax = row[4]
-      product_cf = row[5]
-      product_cv = row[6]
-      product_ml = row[7]
-      sellingPrice_percent = (sellingPrice / sellingPrice) * 100
-      product_cost_percent = (product_cost / sellingPrice) * 100
-      grossIncome_percent = (grossIncome / sellingPrice) * 100
-      product_tax_percent = (product_tax * sellingPrice) / 100
-      product_cf_percent = (product_cf * sellingPrice) / 100
-      product_cv_percent = (product_cv * sellingPrice) / 100
-      others_percent = (others * sellingPrice) / 100
-      product_ml_percent = (sellingPrice * product_ml) /100
-      prodDetails = [["Código", row[0], ],
-                ["Nome", row[1], ],
-                ["Descrição", row[2], ],
-                ["Preço de Venda", round(sellingPrice,2), sellingPrice_percent],
-                ["Custo", round(product_cost,2), product_cost_percent],
-                ["Receita Bruta", round(grossIncome,2), grossIncome_percent],
-                ["Custo Fixo", round(product_cf_percent,2), product_cf],
-                ["Comissão de Vendas", round(product_cv_percent,2), product_cv],
-                ["Impostos", round(product_tax_percent,2), product_tax],
-                ["Outros custos", round(others_percent,2), others],
-                ["Margem de Lucro", round(product_ml_percent,2), product_ml],
-                ["Descrição da Margem de Lucro",ml_desc]]
-      table = tabulate.tabulate(prodDetails, headers = ["Descrição", "Valor", "%"], tablefmt = "grid")
-      print(table)
-  ans = input("\n\nEsse é o produto que você deseja remover? [1] Sim [2] Não\n")
-  match ans:
-    case "1":
-      sql = "DELETE FROM `products` WHERE cod = %s"
-      val = (searchCode, )
-      cursor.execute(sql, val)
-      conn.commit()
-      print("\n\n" + str(cursor.rowcount) + " produto removido com sucesso.")
-      cursor.close()
+  searchCode = (input("Insira o código do produto que deseja excluir(0 para retornar ao menu): "))
+  if (searchCode == "0"):
+    menuShow()
+  else:
+    sql = "SELECT * FROM `products` WHERE cod = %s"
+    val = (searchCode, )
+    cursor.execute(sql, val)
+    result = cursor.fetchall()
+    if not result:
+      print("\n\nProduto não encontrado.")
+      prodRemoving()
+    for row in result:
+        if (row[7] > 20):
+          ml_desc = "Lucro alto"
+        elif (row[7] > 10 and row[7] <= 20):
+          ml_desc = "Lucro médio"
+        elif (row[7] > 0 and row[7] < 10):
+          ml_desc = "Lucro baixo"
+        elif (row[7] == 0):
+          ml_desc = "Equilíbrio"
+        elif (row[7] < 0):
+          ml_desc = "Prejuízo"  
+        sellingPrice = row[3] / (1 - ((row[5] + row[6] + row[4] + row[7]) / 100))
+        grossIncome = sellingPrice - row[3]
+        others = row[5] + row[6] + row[4]
+        product_cost = row[3]
+        product_tax = row[4]
+        product_cf = row[5]
+        product_cv = row[6]
+        product_ml = row[7]
+        sellingPrice_percent = (sellingPrice / sellingPrice) * 100
+        product_cost_percent = (product_cost / sellingPrice) * 100
+        grossIncome_percent = (grossIncome / sellingPrice) * 100
+        product_tax_percent = (product_tax * sellingPrice) / 100
+        product_cf_percent = (product_cf * sellingPrice) / 100
+        product_cv_percent = (product_cv * sellingPrice) / 100
+        others_percent = (others * sellingPrice) / 100
+        product_ml_percent = (sellingPrice * product_ml) /100
+        prodDetails = [["Código", row[0], ],
+                  ["Nome", row[1], ],
+                  ["Descrição", row[2], ],
+                  ["Preço de Venda", round(sellingPrice,2), sellingPrice_percent],
+                  ["Custo", round(product_cost,2), product_cost_percent],
+                  ["Receita Bruta", round(grossIncome,2), grossIncome_percent],
+                  ["Custo Fixo", round(product_cf_percent,2), product_cf],
+                  ["Comissão de Vendas", round(product_cv_percent,2), product_cv],
+                  ["Impostos", round(product_tax_percent,2), product_tax],
+                  ["Outros custos", round(others_percent,2), others],
+                  ["Margem de Lucro", round(product_ml_percent,2), product_ml],
+                  ["Descrição da Margem de Lucro",ml_desc]]
+        table = tabulate.tabulate(prodDetails, headers = ["Descrição", "Valor", "%"], tablefmt = "grid")
+        print(table)
+    ans = input("\n\nEsse é o produto que você deseja remover? [1] Sim [2] Não\n")
+    match ans:
+      case "1":
+        sql = "DELETE FROM `products` WHERE cod = %s"
+        val = (searchCode, )
+        cursor.execute(sql, val)
+        conn.commit()
+        print("\n\n" + str(cursor.rowcount) + " produto removido com sucesso.")
+        cursor.close()
+        menuShow()
+      case "2":
+        prodRemoving()
       
 def prodUpdating():
     try:
       cursor = conn.cursor()
-      searchCode = (input("Insira o código do produto que deseja atualizar(Insira 0 para retornar ao menuShowShow): "))
+      searchCode = (input("Insira o código do produto que deseja atualizar(Insira 0 para retornar ao menu): "))
       if (searchCode == "0"):
         menuShow()
       else:
