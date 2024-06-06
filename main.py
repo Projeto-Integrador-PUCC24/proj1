@@ -7,7 +7,8 @@ if (conn != None):
           print("Connection successful.")
 else:
           print("Connection failed.")
-def menu():
+          
+def menuShow():
     try:
       print("\n\nEscolha uma opção.\n[1]Cadastrar produto.\n[2]Remover um produto.\n[3]Atualizar um produto.\n[4]Listar todos os produtos.\n[5]Buscar por um produto.\n[6]Sair.\n")
       menu = int(input("Digite o número da opção desejada: "))
@@ -31,12 +32,18 @@ def menu():
           print("\n\nFinalizando execução.")
           exit()
         case _:
-          print("\n\nOpção inválida.")
+           print("\n\nOpção inválida.")
+           time.sleep(1)
+           os.system("cls")
+           menuShow()
+    
     except ValueError:
       print("\n\nValor inválido, favor tentar novamente.")
       time.sleep(1)
       os.system("cls")
+      menuShow()
+
 if __name__ == "__main__":
   time.sleep(1)
   os.system("cls")
-  menu()
+  menuShow()
