@@ -16,16 +16,12 @@ def menuShow():
         case 1:
           menumethods.prodAdding()
         case 2:
-          stdout.flush()
           menumethods.prodRemoving()
         case 3:
-          stdout.flush()
           menumethods.prodUpdating()
         case 4:
-          stdout.flush()
           menumethods.prodListing()
         case 5:
-          stdout.flush()
           menumethods.prodSearching()
         case 6:
           conn.close()

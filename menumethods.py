@@ -23,31 +23,30 @@ def prodAdding():
     try:
       product_id = input("Insira o código do produto: ")
       product_id = int(product_id)
-      if(product_id < 0):
+      if(product_id <= 0):
         print("\n\nCódigo inválido!")
-        prodAdding()
+        continue
       product_name = input("Insira o nome do produto: ")
       product_desc = input("Insira uma breve descrição do produto: ")
       product_cost = float(input("Insira o custo do produto: "))
-      if (product_cost < 0):
+      if (product_cost <= 0):
         print("\n\Valor inválido!")
         continue
       product_cf_percent = float(input("Insira o custo fixo do produto: "))
-      if (product_cf_percent < 0):
+      if (product_cf_percent <= 0):
         print("\n\Valor inválido!")
         continue
       product_cv_percent = float(input("Insira a comissão de vendas: "))
-      if (product_cv_percent < 0):
+      if (product_cv_percent <= 0):
         print("\n\Valor inválido!")
         continue
       product_tax_percent = float(input("Insira o valor dos impostos: "))
-      if (product_tax_percent < 0):
+      if (product_tax_percent <= 0):
         print("\n\Valor inválido!")
-        prodAdding()
+        continue
       product_ml_percent = float(input("Insira a rentabilidade/margem de lucro: "))
       sellingPrice = product_cost / (1 - ((product_cf_percent + product_cv_percent + product_tax_percent + product_ml_percent) / 100)) 
-      sellingPrice_percent = (sellingPrice / product_cost) * 100
-
+      sellingPrice_percent = (sellingPrice / sellingPrice) * 100
       grossIncome = sellingPrice - product_cost
       grossIncome_percent = (grossIncome / sellingPrice) * 100
       product_cf = (product_cf_percent * sellingPrice) / 100
@@ -70,7 +69,7 @@ def prodAdding():
       print("=============================================")
       print("\n\nVisão detalhada: ")
       product_cost_percent = (product_cost / sellingPrice) * 100
-      productDetails = [["Descrição", "Valor", "%"],["Preço de Venda", round(sellingPrice,2), 100],
+      productDetails = [["Descrição", "Valor", "%"],["Preço de Venda", round(sellingPrice,2), sellingPrice_percent],
             ["Custo de aquisição", round(product_cost,2), product_cost_percent ],
             ["Receita Bruta", round(grossIncome, 2), grossIncome_percent],
             ["Custo Fixo", round(product_cf,2), product_cf_percent],
