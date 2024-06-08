@@ -2,7 +2,7 @@ import os, menumethods, time, db, ctypes
 from sys import stdout
 import mysql.connector
 products = []
-conn = mysql.connector.connect(host = db.host, user = db.user, password = db.password, database = db.database)
+conn = mysql.connector.connect(host = db.host, user = db.user, password = db.password, database = db.database) #inicia conexao
 if (conn != None):
           print("Connection successful.")
 else:
@@ -29,8 +29,8 @@ def menuShow():
           exit()
         case _:
            print("\n\nOpção inválida.")
-           time.sleep(1)
-           os.system("cls")
+           time.sleep(1) #delay de um segundo
+           os.system("cls") 
            menuShow()
     
     except ValueError:

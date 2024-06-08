@@ -7,12 +7,12 @@ import tabulate, mysql.connector, ctypes
 
 def pushProduct(cod, nome, desc, cp, ip, cf, cv, ml):
   if conn != None:
-      cursor = conn.cursor()
-      sql = "INSERT INTO products (`cod`, `nome`, `desc`, `cp`, `ip`, `cf`, `cv`, `ml`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-      vals = (cod, nome, desc, cp, ip, cf, cv, ml)
-      cursor.execute(sql, vals)
-      conn.commit()
-      cursor.close()
+      cursor = conn.cursor() #cria um 'cursor', que permite que você interaja com o banco
+      sql = "INSERT INTO products (`cod`, `nome`, `desc`, `cp`, `ip`, `cf`, `cv`, `ml`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)" #criação da query
+      vals = (cod, nome, desc, cp, ip, cf, cv, ml) #valores da query para impedir SQL Injection
+      cursor.execute(sql, vals) #executa a query utilizando os valores
+      conn.commit()#'commit' necessario para fazer alterações no banco
+      cursor.close()#fecha o cursor
   else:
     print("Produto não foi adicionado. Por favor, tente novamente.")
 
@@ -79,10 +79,10 @@ def prodAdding():
             ["Rentabilidade", round(product_ml,2), product_ml_percent],
             ["Descrição da Margem de Lucro", product_mlDesc, product_ml_percent]
             ]
-      table1 = tabulate.tabulate(productDetails,headers = "firstrow", tablefmt = "grid")
+      table1 = tabulate.tabulate(productDetails,headers = "firstrow", tablefmt = "grid")#cria uma tabela usando a biblioteca tabulate
       print(table1)
       products = [["Código", "Preço de Venda", "Margem de Lucro"],[product_id, round(sellingPrice,2), round(product_ml,2)]]
-      pushProduct(product_id, product_name, product_desc, product_cost, product_tax_percent, product_cf_percent, product_cv_percent, product_ml_percent)
+      pushProduct(product_id, product_name, product_desc, product_cost, product_tax_percent, product_cf_percent, product_cv_percent, product_ml_percent) #envia o produto para o banco de dados através da função criada
       print("\n\nProduto adicionado com sucesso!")
       print("\n\nDeseja adicionar outro produto?")
       answer = input("[1] Sim\n[2] Não\n")
@@ -98,10 +98,10 @@ def prodAdding():
 def prodListing():
   try:
     os.system('cls')
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM products")
-    result = cursor.fetchall()
-    for row in result:
+    cursor = conn.cursor()#cria um 'cursor', que permite que você interaja com o banco
+    cursor.execute("SELECT * FROM products")#define a query
+    result = cursor.fetchall()#executa o metodo 'fetchall', que retorna todos os resultados da query
+    for row in result: #itera o resultado
       if (row[7] > 20):
         ml_desc = "Lucro alto"
       elif (row[7] > 10 and row[7] <= 20):
@@ -163,14 +163,14 @@ def prodRemoving():
   if (searchCode == "0"):
     menuShow()
   else:
-    sql = "SELECT * FROM `products` WHERE cod = %s"
-    val = (searchCode, )
-    cursor.execute(sql, val)
+    sql = "SELECT * FROM `products` WHERE cod = %s"#cria query
+    val = (searchCode, )#valores da query
+    cursor.execute(sql, val)#executa query com os valores
     result = cursor.fetchall()
     if not result:
       print("\n\nProduto não encontrado.")
       prodRemoving()
-    for row in result:
+    for row in result: #itera resultado
         if (row[7] > 20):
           ml_desc = "Lucro alto"
         elif (row[7] > 10 and row[7] <= 20):
@@ -208,15 +208,15 @@ def prodRemoving():
                   ["Impostos", round(product_tax_percent,2), product_tax],
                   ["Outros custos", round(others_percent,2), others],
                   ["Margem de Lucro", round(product_ml_percent,2), product_ml],
-                  ["Descrição da Margem de Lucro",ml_desc]]
-        table = tabulate.tabulate(prodDetails, headers = ["Descrição", "Valor", "%"], tablefmt = "grid")
+                  ["Descrição da Margem de Lucro",ml_desc]] #cria lista com valores de produto
+        table = tabulate.tabulate(prodDetails, headers = ["Descrição", "Valor", "%"], tablefmt = "grid") #cria uma tabela usando a biblioteca 'tabulate' e a lista 'prodDetails'
         print(table)
     ans = input("\n\nEsse é o produto que você deseja remover? [1] Sim [2] Não\n")
     match ans:
       case "1":
-        sql = "DELETE FROM `products` WHERE cod = %s"
-        val = (searchCode, )
-        cursor.execute(sql, val)
+        sql = "DELETE FROM `products` WHERE cod = %s"#cria query
+        val = (searchCode, )#valores da query
+        cursor.execute(sql, val)#executa query com valores
         conn.commit()
         print("\n\n" + str(cursor.rowcount) + " produto removido com sucesso.")
         cursor.close()
@@ -285,6 +285,7 @@ def prodUpdating():
                 desired = int(input("O que você deseja atualizar?\n[1] Nome\n[2] Descrição\n[3] Custo\n[4] Impostos\n[5] Custo Fixo\n[6] Comissão de Vendas\n[7] Margem de Lucro\n[8] Cancelar\n"))
                 match desired:
                   case 1:
+                    cursor = conn.cursor()
                     newName = input("Insira o novo nome do produto: ")
                     sql = "UPDATE `products` SET nome = %s WHERE cod = %s"
                     val = (newName, searchCode)
@@ -293,6 +294,7 @@ def prodUpdating():
                     print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
                     cursor.close()
                   case 2:
+                    cursor = conn.cursor()
                     newDesc = input("Insira a nova descrição do produto: ")
                     sql = "UPDATE `products` SET `desc` = %s WHERE cod = %s"
                     val = (newDesc, searchCode)
@@ -301,22 +303,25 @@ def prodUpdating():
                     print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
                     cursor.close()
                   case 3:
+                    cursor = conn.cursor()
                     newCost = float(input("Insira o novo custo do produto: "))
-                    sql = "UPDATE `products` SET cost = %s WHERE cod = %s"
+                    sql = "UPDATE `products` SET cp = %s WHERE cod = %s"
                     val = (newCost, searchCode)
                     cursor.execute(sql, val)
                     conn.commit()
                     print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
                     cursor.close()
                   case 4:
+                    cursor = conn.cursor()
                     newTax = float(input("Insira o novo valor dos impostos: "))
-                    sql = "UPDATE `products` SET tax = %s WHERE cod = %s"
+                    sql = "UPDATE `products` SET ip = %s WHERE cod = %s"
                     val = (newTax, searchCode)
                     cursor.execute(sql, val)
                     conn.commit()
                     print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
                     cursor.close()
                   case 5:
+                    cursor = conn.cursor()
                     newCF = float(input("Insira o novo custo fixo do produto: "))
                     sql = "UPDATE `products` SET cf = %s WHERE cod = %s"
                     val = (newCF, searchCode)
@@ -325,6 +330,7 @@ def prodUpdating():
                     print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
                     cursor.close()
                   case 6:
+                    cursor = conn.cursor()
                     newCV = float(input("Insira a nova comissão de vendas: "))
                     sql = "UPDATE `products` SET cv = %s WHERE cod = %s"
                     val = (newCV, searchCode)
@@ -333,6 +339,7 @@ def prodUpdating():
                     print("\n\n" + str(cursor.rowcount) + " produto atualizado com sucesso.")
                     cursor.close()
                   case 7:
+                    cursor = conn.cursor()
                     newML = float(input("Insira a nova margem de lucro: "))
                     sql = "UPDATE `products` SET ml = %s WHERE cod = %s"
                     val = (newML, searchCode)
