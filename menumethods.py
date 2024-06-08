@@ -227,8 +227,8 @@ def prodRemoving():
 def prodUpdating():
     try:
       cursor = conn.cursor()
-      searchCode = (input("Insira o código do produto que deseja atualizar(Insira 0 para retornar ao menu): "))
-      if (searchCode == "0"):
+      searchCode = int(input("Insira o código do produto que deseja atualizar(Insira 0 para retornar ao menu): "))
+      if (searchCode <= 0):
         menuShow()
       else:
         sql = "SELECT * FROM `products` WHERE cod = %s"
